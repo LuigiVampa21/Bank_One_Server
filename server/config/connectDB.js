@@ -17,3 +17,9 @@ const sequelize = new Sequelize(
 module.exports = sequelize;
 
 // Third arguments in model = paranoid: true
+// find ALl excludes['password']
+// Increment decrement model.property
+// Sequelize.fn 'SUM', 'AVG',
+// findAll limit
+// findAll order [['age', 'DESC' ]]
+// findAll op.gt > 0
