@@ -125,7 +125,7 @@ const User = sequelize.define(
       defaultValue: null,
     },
     reset_password_expires: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       defaultValue: null,
     },
     image: {
