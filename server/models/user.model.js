@@ -94,7 +94,7 @@ const User = sequelize.define(
           msg: "Please provide a password",
         },
         len: {
-          args: [8, 20],
+          args: [8, 100],
           msg: "The password should be at least 8 chars long",
         },
       },
@@ -139,7 +139,7 @@ const User = sequelize.define(
   },
   {
     hooks: {
-      afterValidate: async user => {
+      beforeSave: async user => {
         if (user.changed("password")) {
           user.password = await bcrypt.hash(user.password, 10);
         }

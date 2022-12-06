@@ -1,11 +1,11 @@
 const sendEmail = require("./sendEmail");
 
 const sendResetPasswordEmail = async ({ name, email, token }) => {
-  const resetURL = `${process.env.ORIGIN_WS}/reset-password/${token}?email=${email}`;
-  const message = `<p>Follow this link to reset your Adelfos_client password for your ${email} account. <a href="${resetURL}">Reset Password</a></p>
+  const resetURL = `${process.env.ORIGIN_API}/reset-password/?token=${token}&email=${email}`;
+  const message = `<p>Follow this link to reset your ${process.env.COMPANY_NAME} password for your ${email} account. <a href="${resetURL}">Reset Password</a></p>
   <p>If you didn’t ask to reset your password, you can ignore this email.</p>
   <p>Thanks</p>
-  <p>Adelfos_CREW</p>
+  <p>${process.env.COMPANY_NAME}</p>
   `;
 
   return sendEmail({

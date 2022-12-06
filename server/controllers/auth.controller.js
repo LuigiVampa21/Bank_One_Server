@@ -155,7 +155,6 @@ exports.forgotPassword = async (req, res) => {
     token: passwordToken,
   });
 
-
   user.reset_password_token = hashString(passwordToken);
   user.reset_password_expires = passwordTokenExpirationDate;
   await user.save();
@@ -163,5 +162,35 @@ exports.forgotPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({
     data: user,
     msg: "Please check your email to reset your password",
+  });
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token, email } = req.query;
+  const { password } = req.body;
+  if (!token || !email || !password) {
+    throw new CustomError.BadRequestError("Invalid credentials");
+  }
+
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    throw new CustomError.BadRequestError(
+      "Sorry, we're unable to verify your email"
+    );
+  }
+
+  const now = new Date();
+  if (
+    user.reset_password_token === hashString(token) &&
+    user.reset_password_expires > now
+  ) {
+    user.password = password;
+    user.reset_password_token = null;
+    user.reset_password_expires = null;
+    await user.save();
+  }
+  res.status(StatusCodes.OK).json({
+    data: user,
+    msg: "Your password has been updated",
   });
 };
