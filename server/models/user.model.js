@@ -1,4 +1,4 @@
-const sequelize = require("../config/connectDB");
+const { sequelize } = require("../config/connectDB");
 const { DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const CustomError = require("../errors");
@@ -6,11 +6,10 @@ const CustomError = require("../errors");
 const User = sequelize.define(
   "User",
   {
-    user_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true,
       unique: true,
     },
     first_name: {
@@ -21,8 +20,8 @@ const User = sequelize.define(
           args: true,
           msg: "A  firstname is required!",
         },
-        isLowercase,
-        isAlphanumeric,
+        isLowercase: true,
+        isAlphanumeric: true,
         len: [1, 50],
       },
     },
@@ -34,8 +33,8 @@ const User = sequelize.define(
           args: true,
           msg: "A  lastname is required!",
         },
-        isLowercase,
-        isAlphanumeric,
+        isLowercase: true,
+        isAlphanumeric: true,
         len: [1, 50],
       },
     },
@@ -54,7 +53,7 @@ const User = sequelize.define(
         msg: "Email address already in use",
       },
     },
-    phone: {
+    phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -66,7 +65,7 @@ const User = sequelize.define(
       },
     },
     birth_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         isDate: {
@@ -107,7 +106,7 @@ const User = sequelize.define(
         notEmpty: {
           msg: "You need to confirm your pssword",
         },
-        passwordsMatch: val => {
+        passwordsMatch(val) {
           if (val != this.password) {
             throw new CustomError.BadRequestError(
               "Passwords does not match each other"
@@ -119,26 +118,33 @@ const User = sequelize.define(
     },
     verification_token: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     reset_password_token: {
       type: DataTypes.STRING,
+      defaultValue: null,
     },
     reset_password_expires: {
       type: DataTypes.STRING,
+      defaultValue: null,
     },
     image: {
       type: DataTypes.STRING,
       defaultValue: "default.jpg",
     },
+    last_active: {
+      type: DataTypes.DATE,
+      defaultValue: new Date(),
+    },
   },
   {
     hooks: {
-      beforeSave: async user => {
+      afterValidate: async user => {
         if (user.changed("password")) {
           user.password = await bcrypt.hash(user.password, 10);
         }
       },
-      beforeCreated: user => {
+      beforeCreate: user => {
         const now = new Date();
         now.setFullYear(now.getFullYear() - 18);
         const birthDate = new Date(user.birth_date);
@@ -146,6 +152,13 @@ const User = sequelize.define(
           throw new CustomError.BadRequestError(
             "Sorry you need to be older than 18 to create an account"
           );
+        }
+      },
+    },
+    validate: {
+      usernamePassMatch() {
+        if (this.username === this.password) {
+          throw new Error("Password cannot be your username");
         }
       },
     },

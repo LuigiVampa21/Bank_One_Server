@@ -235,7 +235,7 @@ const Country = sequelize.define(
   const Customer = sequelize.define(
     "customer",
     {
-      customername: {
+      customerName: {
         type: DataTypes.STRING,
         unique: true,
       },

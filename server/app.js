@@ -12,6 +12,8 @@ const errorHandler = require("./middlewares/error-handler");
 
 const app = express();
 
+const authRoute = require("./routes/auth.route");
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -25,6 +27,8 @@ app.use(cors(corsOptions));
 app.get("/", (req, res) => {
   res.send("Welcome to the official Bank One API");
 });
+
+app.use("/api/v1/bankone/auth", authRoute);
 
 app.use(notFound);
 app.use(errorHandler);
