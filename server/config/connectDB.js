@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const { SET_DEFERRED } = require("sequelize/types/deferrable");
 
 const sequelize = new Sequelize(
   `${process.env.PSQL_POSTGRES}://${process.env.PSQL_USERNAME}:${process.env.PSQL_PASSWORD}@${process.env.PSQL_HOST}:${process.env.PSQL_PORT}/${process.env.PSQL_DATABASE_NAME}`
@@ -115,3 +116,79 @@ module.exports = sequelize;
 // }
 // }
 // }
+
+// ------------------------------------------------------------ ASSOCIATIONS
+
+// --------------------------------------------------------------- ONE TO ONE
+
+// Country and capital
+
+const Country = sequelize.define(
+  "country",
+  {
+    countryName: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
+const Capital = sequelize.define(
+  "capital",
+  {
+    capitalName: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+  },
+  {
+    timestamps: false,
+  }
+);
+
+// Country = parent Table
+Country.hasOne(Capital, {
+  foreignKey: {
+    name: "country_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+// on delete cascade remove botch column when one is deleted
+// on update cascade will update the foreignKey if ever the primary key of the parent is modified
+
+let country, capital;
+// SET
+country.setCapital(capital);
+// GET
+country.getCapital();
+// CREATE
+country.createCapital({
+  capitalName: "Paris",
+});
+
+// Capital = child table
+Capital.belongsTo(Country, {
+  foreignKey: {
+    name: "country_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  onDelete: "CASCADE",
+ });
+
+// let capital, country;
+// SET
+Capital.setCountry(country);
+// GET
+Capital.getCountry();
+// CREATE
+Capital.createCountry({
+  countryName: "Paris",
+});
+
+// await sequelize.sync({alter: true}).then(() => console.lgo('DB sync')).catch((err) => console.error(err))
