@@ -154,6 +154,13 @@ const User = sequelize.define(
           );
         }
       },
+      afterDestroy: async user => {
+        const accounts = await user.getBankAccounts();
+        //  accounts.forEach(async account => {
+        //     await account.destroy();
+        //   });
+        accounts.forEach(async account => await account.destroy());
+      },
     },
     validate: {
       usernamePassMatch() {
@@ -162,6 +169,7 @@ const User = sequelize.define(
         }
       },
     },
+    paranoid: true,
   }
 );
 
