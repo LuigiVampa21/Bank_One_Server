@@ -1,7 +1,6 @@
 const { sequelize } = require("../config/connectDB");
 const { DataTypes } = require("sequelize");
 // const CustomError = require("../errors");
-const generateIBAN = require("../utils/generateIBAN");
 
 const BankAccount = sequelize.define("BankAccount", {
   id: {
@@ -24,12 +23,12 @@ const BankAccount = sequelize.define("BankAccount", {
   },
   iban: {
     type: DataTypes.STRING,
-    defaultValue: generateIBAN(),
-    // unique: true,
+    allowNull: false,
+    unique: true,
   },
   is_active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
   },
   current_amount: {
     type: DataTypes.DECIMAL(12, 2),

@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const User = require("../models/user.model");
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
+const generateIBAN = require("../utils/generateIBAN");
 const sendVerificationEmail = require("../email/sendVerificationEmail");
 const sendResetPasswordEmail = require("../email/sendResetPassword");
 
@@ -44,34 +45,22 @@ exports.register = async (req, res) => {
     );
   }
 
-  // user.bulkCreateBankAccount([
-  //   {
-  //     type: "checking",
-  //   },
-  //   {
-  //     type: "savings",
-  //   },
-  //   {
-  //     type: "investments",
-  //   },
-  // ]);
-
-  const checking = await user.createBankAccount({
+  const checking = user.createBankAccount({
     type: "checking",
+    iban: generateIBAN(),
   });
 
-  const savings = await user.createBankAccount({
+  const savings = user.createBankAccount({
     type: "savings",
+    iban: generateIBAN(),
   });
 
-  const investments = await user.createBankAccount({
+  const investments = user.createBankAccount({
     type: "investments",
+    iban: generateIBAN(),
   });
 
-  // const resolve = await Promise.all([checking, savings, investments]);
-
-  // console.log(checking, savings, investments);
-  // console.log(await checking);
+  await Promise.all([checking, savings, investments]);
 
   await sendVerificationEmail(
     user.first_name,
@@ -85,7 +74,7 @@ exports.register = async (req, res) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  const { token, email } = req.params;
+  const { token, email } = req.query;
   if (!token) {
     throw new CustomError.BadRequestError(
       "Sorry, we're unable to verify your email"
@@ -103,30 +92,13 @@ exports.verifyEmail = async (req, res) => {
     user.is_active = true;
   }
 
-  // async () => {
-  // await user.createBankAccount({
-  //   type: "checking",
-  // });
-  // await user.createBankAccount({
-  //   type: "savings",
-  // });
-  // await user.createBankAccount({
-  //   type: "investments",
-  // });
+  const userAccounts = await user.getBankAccounts();
 
-  // const [
-  //   a = user.createBankAccount({
-  //     type: "checking",
-  //   }),
-  //   b = user.createBankAccount({
-  //     type: "savings",
-  //   }),
-  //   c = user.createBankAccount({
-  //     type: "investments",
-  //   }),
-  // ] = await Promise.all([a(), b(), c()]);
-  // console.log(a, b, c);
+  console.log("-----------------------------------------");
+  console.log(userAccounts);
+
   res.status(StatusCodes.OK).json({
     user,
+    userAccounts,
   });
 };

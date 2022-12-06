@@ -10,6 +10,6 @@ router.route("/register").post(
 );
 // router.route("/login").post(authController.login);
 
-router.route("/verify-email").get(authController.verifyEmail);
+router.route("/verify-email").post(authController.verifyEmail);
 
 module.exports = router;
