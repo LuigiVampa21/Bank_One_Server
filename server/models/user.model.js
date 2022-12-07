@@ -61,7 +61,7 @@ const User = sequelize.define(
       },
       unique: {
         args: true,
-        msg: "Phone number synchronized to an account",
+        msg: "Phone number already linked to existing account",
       },
     },
     birth_date: {

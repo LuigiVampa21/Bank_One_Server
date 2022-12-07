@@ -14,6 +14,7 @@ const app = express();
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
+const txRoute = require("./routes/transaction.route");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
+app.use("/api/v1/bankone/transactions", txRoute);
 
 app.use(notFound);
 app.use(errorHandler);

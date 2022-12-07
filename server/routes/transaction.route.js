@@ -11,6 +11,6 @@ router
 router
   .route("/:id")
   .get(transactionController.getSingleTx)
-  .patch(transactionController.modifyTx);
+  // .patch(transactionController.modifyTx);
 
 module.exports = router;

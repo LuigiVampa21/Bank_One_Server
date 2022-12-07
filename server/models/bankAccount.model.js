@@ -12,10 +12,11 @@ const BankAccount = sequelize.define(
       unique: true,
     },
     type: {
-      // type: DataTypes.STRING,
-      type: DataTypes.ENUM({
-        values: ["checking", "savings", "investments"],
-      }),
+      // Usage of string and isIn for development pruproses : usage of sync alter: true ! think about change back after the dev processus
+      type: DataTypes.STRING,
+      // type: DataTypes.ENUM({
+      //   values: ["checking", "savings", "investments"],
+      // }),
       validate: {
         isIn: {
           args: [["checking", "savings", "investments"]],
@@ -32,9 +33,13 @@ const BankAccount = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    current_amount: {
+    amount: {
       type: DataTypes.DECIMAL(12, 2),
       defaultValue: 0,
+    },
+    tx_verification_token: {
+      type: DataTypes.STRING,
+      defaultValue: null,
     },
   },
   {
