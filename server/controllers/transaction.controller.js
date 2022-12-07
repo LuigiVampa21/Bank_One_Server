@@ -35,28 +35,28 @@ exports.createNewTx = async (req, res) => {
       "No account found with the information you provided"
     );
   }
+  const txToken = crypto.randomBytes(70).toString("hex");
 
   const transaction = await Transaction.create({
     amount,
     description,
     beneficiary,
+    verification_token: txToken,
   });
   if (!transaction) {
     throw new CustomError.BadRequestError(
       "Oops, something went wrong, please try again later!"
     );
   }
-  const txToken = crypto.randomBytes(70).toString("hex");
-  bankAccount.tx_verification_token = txToken;
+  transaction.verification_token = txToken;
   await sendNewTransaction({
     name: user.first_name,
+    transaction: transaction.id,
     amount,
     email: user.email,
-    verificationToken: bankAccount.tx_verification_token,
+    verificationToken: transaction.verification_token,
     beneficiary,
   });
-  //   bankAccount.add
-  //   or newTx.set
   await transaction.setBankAccount(bankAccount);
   res.status(StatusCodes.OK).json({
     bankAccount,

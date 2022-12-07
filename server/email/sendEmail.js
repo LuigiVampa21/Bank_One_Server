@@ -6,7 +6,7 @@ const sendEmail = async ({ to, subject, html }) => {
   const transporter = nodemailer.createTransport(nodemailerConfig);
 
   return transporter.sendMail({
-    from: '"COMPANY_NAME" <EMAIL@COMPANY.com>',
+    from: `${process.env.COMPANY_NAME} '<bankone@corporation.com>'`,
     to,
     subject,
     html,

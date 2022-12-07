@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const User = require("../models/user.model");
+const Transaction = require("../models/transaction.model");
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
 const generateIBAN = require("../utils/generateIBAN");
@@ -192,5 +193,34 @@ exports.resetPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({
     data: user,
     msg: "Your password has been updated",
+  });
+};
+
+exports.confirmTx = async (req, res) => {
+  const { token, txid } = req.query;
+  if (!token || !txid) {
+    throw new CustomError.BadRequestError(
+      "Sorry, we're unable to verify the transaction with the informations you provided"
+    );
+  }
+  const transaction = await Transaction.findByPk(txid);
+  if (!transaction) {
+    throw new CustomError.BadRequestError(
+      "Sorry, this transaction has not been requested, or has not been treated yet by our services"
+    );
+  }
+  const txToken = transaction.verification_token;
+
+  if (token !== txToken) {
+    throw new CustomError.BadRequestError(
+      "The transaction you are requesting cannot be setlled, please try again later"
+    );
+  }
+  const newTx = await transaction.update({
+    verification_token: null,
+    status: "settled",
+  });
+  res.status(StatusCodes.OK).json({
+    transaction,
   });
 };

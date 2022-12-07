@@ -2,19 +2,13 @@ const sendEmail = require("./sendEmail");
 
 const sendNewTransaction = async ({
   name,
+  transaction,
   amount,
   email,
   verificationToken,
   beneficiary,
 }) => {
-  console.log(
-    "--------------------------------------------------------------------------------------"
-  );
-  console.log(email);
-  console.log(
-    "--------------------------------------------------------------------------------------"
-  );
-  const confirmTx = `${process.env.ORIGIN_API}/verify-email/?token=${verificationToken}&email=${email}`;
+  const confirmTx = `${process.env.ORIGIN_API}/new-transaction/?token=${verificationToken}&txid=${transaction}`;
 
   const message = `<p> A new transaction of $${amount} has been requested to ${beneficiary}.
   Please follow this link to validate: <a href="${confirmTx}">Confirm Transaction</a></p>

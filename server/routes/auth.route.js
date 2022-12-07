@@ -12,5 +12,6 @@ router.route("/login").post(authController.login);
 router.route("/verify-email").post(authController.verifyEmail);
 router.route("/forgot-password").post(authController.forgotPassword);
 router.route("/reset-password").post(authController.resetPassword);
+router.route("/new-transaction").get(authController.confirmTx);
 
 module.exports = router;

@@ -37,10 +37,6 @@ const BankAccount = sequelize.define(
       type: DataTypes.DECIMAL(12, 2),
       defaultValue: 0,
     },
-    tx_verification_token: {
-      type: DataTypes.STRING,
-      defaultValue: null,
-    },
   },
   {
     paranoid: true,

@@ -57,6 +57,10 @@ const Transaction = sequelize.define(
     beneficiary: {
       type: DataTypes.STRING,
     },
+    verification_token: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
   },
   {
     paranoid: true,
