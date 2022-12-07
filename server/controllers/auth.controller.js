@@ -5,6 +5,7 @@ const crypto = require("crypto");
 
 const User = require("../models/user.model");
 const Transaction = require("../models/transaction.model");
+const txController = require("../controllers/transaction.controller");
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
 const generateIBAN = require("../utils/generateIBAN");
@@ -220,6 +221,9 @@ exports.confirmTx = async (req, res) => {
     verification_token: null,
     status: "settled",
   });
+  if (newTx) {
+    txController.finalizeTx(transaction);
+  }
   res.status(StatusCodes.OK).json({
     transaction,
   });

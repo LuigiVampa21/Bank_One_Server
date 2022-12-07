@@ -40,6 +40,15 @@ const Transaction = sequelize.define(
         return uncompressed;
       },
     },
+    type: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: {
+          args: [["internal", "external"]],
+          msg: "Transaction must be either internal, or external",
+        },
+      },
+    },
     status: {
       // Usage of string and isIn for development pruproses : usage of sync alter: true ! think about change back after the dev processus
       type: DataTypes.STRING,

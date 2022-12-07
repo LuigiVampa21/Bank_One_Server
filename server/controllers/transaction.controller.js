@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
 
 const CustomError = require("../errors");
@@ -8,9 +8,46 @@ const sendNewTransaction = require("../email/sendNewTransaction");
 const crypto = require("crypto");
 
 exports.getAllTx = async (req, res) => {
-  const txs = await Transaction.findAll();
+  // let query = [];
+  let query = {};
+  const {
+    type,
+    status,
+    gtAmount,
+    ltAmount,
+    eqAmount,
+    order,
+    startDate,
+    endDate,
+    // if startDate == endDate search by eqDate
+    // eqDate,
+  } = req.body;
+
+  console.log(req.body);
+  const queryArray = [
+    { type },
+    { status },
+    { gtAmount },
+    { ltAmount },
+    { eqAmount },
+    { order },
+    { startDate },
+    { endDate },
+  ];
+
+  queryArray.forEach(q => {
+    if (Object.values(q)[0]) {
+      const [key, value] = Object.entries(q)[0];
+      query[key] = value;
+    }
+  });
+  // const txs = await Transaction.findAndCountAll({
+  //   where: {
+  //     [Op.and]: [{ type }, { status }],
+  //   },
+  // });
   res.status(StatusCodes.OK).json({
-    txs,
+    data: query,
   });
 };
 
@@ -28,8 +65,13 @@ exports.createNewTx = async (req, res) => {
     );
   }
 
+  if (amount > bankAccount.amount) {
+    throw new CustomError.BadRequestError(
+      "Insufficient funds. Please make a deposit to complete this transaction."
+    );
+  }
+
   const user = await bankAccount.getUser();
-  // console.log(user.email);
   if (!user) {
     throw new CustomError.BadRequestError(
       "No account found with the information you provided"
@@ -41,6 +83,7 @@ exports.createNewTx = async (req, res) => {
     amount,
     description,
     beneficiary,
+    type,
     verification_token: txToken,
   });
   if (!transaction) {
@@ -69,5 +112,21 @@ exports.getSingleTx = async (req, res) => {
   const tx = await Transaction.findByPk(id);
   res.status(StatusCodes.OK).json({
     tx,
+  });
+};
+
+exports.finalizeTx = async transaction => {
+  const iban = transaction.beneficiary;
+  const { BankAccountId: id } = transaction;
+  const { amount } = transaction;
+
+  const accountSending = await BankAccount.findByPk(id);
+  const accountReceiving = await BankAccount.findOne({ where: { iban } });
+
+  await accountSending.decrement("amount", {
+    by: amount,
+  });
+  await accountReceiving.increment("amount", {
+    by: amount,
   });
 };
