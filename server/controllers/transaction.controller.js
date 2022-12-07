@@ -2,6 +2,7 @@ const { Sequelize, Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
 
 const CustomError = require("../errors");
+const CustomQuery = require("../utils/customQuery");
 const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
@@ -19,11 +20,8 @@ exports.getAllTx = async (req, res) => {
     order,
     startDate,
     endDate,
-    // if startDate == endDate search by eqDate
-    // eqDate,
   } = req.body;
 
-  console.log(req.body);
   const queryArray = [
     { type },
     { status },
@@ -41,13 +39,19 @@ exports.getAllTx = async (req, res) => {
       query[key] = value;
     }
   });
+  const txs = await Transaction.findAll();
+  const finalQuery = CustomQuery.filter(query, txs);
   // const txs = await Transaction.findAndCountAll({
   //   where: {
-  //     [Op.and]: [{ type }, { status }],
+  //     [Op.and]: [{ type: query.type }, { status: query.status }],
   //   },
   // });
   res.status(StatusCodes.OK).json({
-    data: query,
+    // data: {
+    //   type: query.type,
+    //   status: query.status,
+    // },
+    txs,
   });
 };
 
@@ -65,11 +69,13 @@ exports.createNewTx = async (req, res) => {
     );
   }
 
-  if (amount > bankAccount.amount) {
-    throw new CustomError.BadRequestError(
-      "Insufficient funds. Please make a deposit to complete this transaction."
-    );
-  }
+  // commented for testing purposes think about to uncomment for production
+
+  // if (amount > bankAccount.amount) {
+  //   throw new CustomError.BadRequestError(
+  //     "Insufficient funds. Please make a deposit to complete this transaction."
+  //   );
+  // }
 
   const user = await bankAccount.getUser();
   if (!user) {
