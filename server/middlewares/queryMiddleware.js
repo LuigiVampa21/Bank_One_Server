@@ -1,17 +1,17 @@
 const Transaction = require("../models/transaction.model");
+const BankAccount = require("../models/bankAccount.model");
 
 // The userID will be passed with the auth Middleware
 
-exports.customQuery = (req, res, next) => {
+exports.customQuery = async (req, res, next) => {
   const queryObj = { ...req.query };
-  const user = req.user;
+  const userId = req.user;
   // const { account, type, status, amount, order, startDate, endDate } =
   //   req.query;
   // queryObj = { account, type, status, amount, order, startDate, endDate };
 
-  if (queryObj.account) {
-    console.log(queryObj);
-    console.log(user);
+  if (queryObj.account !== "all") {
+    const accounts = await BankAccount.findAll({where: {userId: }});
   }
 
   // const txs = await Transaction.findAll();
