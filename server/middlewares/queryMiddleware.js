@@ -1,9 +1,18 @@
+const Transaction = require("../models/transaction.model");
+
+// The userID will be passed with the auth Middleware
+
 exports.customQuery = (req, res, next) => {
-  let queryObj = {};
-  const { account, type, status, amount, order, startDate, endDate } =
-    req.query;
-  queryObj = { account, type, status, amount, order, startDate, endDate };
-  req.queryObj = queryObj;
+  const queryObj = { ...req.query };
+  const user = req.user;
+  // const { account, type, status, amount, order, startDate, endDate } =
+  //   req.query;
+  // queryObj = { account, type, status, amount, order, startDate, endDate };
+
+  if (queryObj.account) {
+    console.log(queryObj);
+    console.log(user);
+  }
 
   // const txs = await Transaction.findAll();
   // const finalQuery = CustomQuery.filter(query, txs);

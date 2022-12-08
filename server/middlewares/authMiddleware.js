@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const CustomError = require("../errors/index");
 
 exports.checkToken = async (req, res, next) => {
+  console.log(req.headers);
   const token = await req.headers.authorization.split(" ")[1];
   if (!token)
     throw new CustomError.UnauthenticatedError(
