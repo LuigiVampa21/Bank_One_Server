@@ -97,42 +97,8 @@ exports.finalizeTx = async transaction => {
 };
 
 exports.searchDocs = async (req, res) => {
-  let query = {};
-  const { account, type, status, amount, order, startDate, endDate } =
-    req.query;
-
-  // const queryArray = [
-  //   { account },
-  //   { type },
-  // { status },
-  // { amount },
-  // { order },
-  //   { startDate },
-  //   { endDate },
-  // ];
-
-  console.log(query);
-
-  // queryArray.forEach(q => {
-  //   if (Object.values(q)[0]) {
-  //     const [key, value] = Object.entries(q)[0];
-  //     query[key] = value;
-  //   }
-  // });
-  // const txs = await Transaction.findAll();
-  // const finalQuery = CustomQuery.filter(query, txs);
-
-  // const txs = await Transaction.findAndCountAll({
-  //   where: {
-  //     [Op.and]: [{ type: query.type }, { status: query.status }],
-  //   },
-  // });
+  const { queryObj } = req;
   res.status(StatusCodes.OK).json({
-    // data: {
-    //   type: query.type,
-    //   status: query.status,
-    // },
-    // txs,
-    msg: "ok",
+    queryObj,
   });
 };

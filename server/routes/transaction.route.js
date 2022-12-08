@@ -14,6 +14,7 @@ router
   .get(queryMiddleware.customQuery, transactionController.searchDocs);
 
 router.route("/:id").get(transactionController.getSingleTx);
+// if status tx is still pending
 // .patch(transactionController.modifyTx);
 
 module.exports = router;
