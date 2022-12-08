@@ -56,7 +56,6 @@ exports.createNewTx = async (req, res) => {
       "Oops, something went wrong, please try again later!"
     );
   }
-  transaction.verification_token = txToken;
   await sendNewTransaction({
     name: user.first_name,
     transaction: transaction.id,
@@ -97,8 +96,9 @@ exports.finalizeTx = async transaction => {
 };
 
 exports.searchDocs = async (req, res) => {
-  const { queryObj } = req;
+  const { txs } = req;
   res.status(StatusCodes.OK).json({
-    queryObj,
+    results: txs.length,
+    txs,
   });
 };
