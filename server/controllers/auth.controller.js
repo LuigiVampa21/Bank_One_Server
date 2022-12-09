@@ -1,4 +1,3 @@
-const { Sequelize } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");

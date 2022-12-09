@@ -87,6 +87,13 @@ exports.finalizeTx = async transaction => {
   const accountSending = await BankAccount.findByPk(id);
   const accountReceiving = await BankAccount.findOne({ where: { iban } });
 
+  if (!accountReceiving) {
+    await accountSending.decrement("amount", {
+      by: amount,
+    });
+    return;
+  }
+
   await accountSending.decrement("amount", {
     by: amount,
   });

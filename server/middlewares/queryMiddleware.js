@@ -1,5 +1,6 @@
-const Transaction = require("../models/transaction.model");
+// const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
+const User = require("../models/user.model");
 const { Op } = require("sequelize");
 
 exports.customQuery = async (req, res, next) => {
@@ -19,6 +20,11 @@ exports.customQuery = async (req, res, next) => {
   // });
 
   // Filter by account
+
+  const { id } = req.user;
+  const user = await User.findByPk(id);
+
+  // needs to filter with req.user to only get bank from userID
 
   const queryObj = { ...req.query };
   if (queryObj.account === "all") {

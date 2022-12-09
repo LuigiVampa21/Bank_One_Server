@@ -5,7 +5,7 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const { sequelize, connectDB } = require("./config/connectDB");
+const { connectDB } = require("./config/connectDB");
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
@@ -15,6 +15,7 @@ const app = express();
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
 const txRoute = require("./routes/transaction.route");
+const loanRoute = require("./routes/loan.route");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -33,6 +34,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
+app.use("/api/v1/bankone/loans", loanRoute);
 
 app.use(notFound);
 app.use(errorHandler);

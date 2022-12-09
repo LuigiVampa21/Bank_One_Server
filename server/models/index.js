@@ -2,6 +2,7 @@ const { sequelize } = require("../config/connectDB");
 const User = require("./user.model");
 const BankAccount = require("./bankAccount.model");
 const Transaction = require("./transaction.model");
+const Loan = require("./loan.model");
 
 User.hasMany(BankAccount, {
   onDelete: "CASCADE",
@@ -22,6 +23,7 @@ Transaction.belongsTo(BankAccount, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 
 (async () => {
   try {
