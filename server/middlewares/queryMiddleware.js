@@ -2,8 +2,6 @@ const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
 const { Op } = require("sequelize");
 
-// The userID will be passed with the auth Middleware
-
 exports.customQuery = async (req, res, next) => {
   let transactions = [];
   let accounts;
@@ -58,7 +56,6 @@ exports.customQuery = async (req, res, next) => {
 
   // Filter by type
   if (queryObj.type !== "all") {
-    // console.log(transactions);
     transactions = [...transactions].filter(t => t.type == queryObj.type);
   }
 
@@ -77,26 +74,15 @@ exports.customQuery = async (req, res, next) => {
   queryObj.startDate = new Date(queryObj.startDate).getTime();
   queryObj.endDate = new Date(queryObj.endDate).getTime();
 
-  // transactions = {
-  //   startDate: queryObj.startDate,
-  //   endDate: queryObj.endDate,
-  // };
-  // console.log(transactions);
+  transactions = [...transactions].filter(t => {
+    if (
+      new Date(t.createdAt).getTime() > queryObj.startDate &&
+      new Date(t.createdAt).getTime() < queryObj.endDate
+    )
+      return true;
+    else return false;
+  });
 
-  // transactions = [...transactions].filter(t => {
-  //   // console.log(new Date(t.createdAt).getTime() > queryObj.startDate);
-  //   new Date(t.startDate).getTime() > queryObj.startDate;
-  // });
-
-  console.log(transactions);
-
-  // transactions = [...transactions].forEach((t, i) => {
-  //   if (new Date(t.startDate).getTime() < queryObj.startDate) {
-  //     console.log("deleted");
-  //   }
-  // });
-
-  console.log(transactions);
   req.txs = [...transactions];
   next();
 };
