@@ -15,14 +15,14 @@ const BankAccount = sequelize.define(
       // Usage of string and isIn for development pruproses : usage of sync alter: true ! think about change back after the dev processus
       type: DataTypes.STRING,
       // type: DataTypes.ENUM({
-      //   values: ["checking", "savings", "investments"],
+      //   values: ["checking", "savings", "investments", "Bank One Ltd."],
       // }),
-      // validate: {
-      //   isIn: {
-      //     args: [["checking", "savings", "investments"]],
-      //     msg: "Account must be either checking, savings or investments",
-      //   },
-      // },
+      validate: {
+        isIn: {
+          args: [["checking", "savings", "investments", "Bank One Ltd."]],
+          msg: "Account must be either checking, savings or investments",
+        },
+      },
     },
     iban: {
       type: DataTypes.STRING,

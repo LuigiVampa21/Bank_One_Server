@@ -109,3 +109,31 @@ exports.searchDocs = async (req, res) => {
     txs,
   });
 };
+
+exports.createNewLoanTransaction = async (loan) => {
+
+  const masterBA = await BankAccount.findOne({
+    where: {
+      [Op.and]: [
+        { type: "Bank One Ltd." },
+        { iban: "LI 0000 0000 0000 0000" }
+      ],
+    }
+  })
+
+  const account = await loan.getBankAccount()
+
+
+  const transaction = await masterBA.createTransaction({
+    amount: loan.amount,
+    description: "Loan accorded from Bank One Ltd.",
+    beneficiary: account.iban,
+    type: "external",
+    status: "settled",
+
+  });
+
+  return transaction;
+}
+
+

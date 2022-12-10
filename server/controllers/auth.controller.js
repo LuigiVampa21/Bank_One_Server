@@ -230,7 +230,7 @@ exports.confirmTx = async (req, res) => {
 };
 
 exports.approveLoan = async (req, res) => {
-  const { token, lnid } = req.params;
+  const { token, lnid } = req.query;
   const loan = await Loan.findByPk(lnid);
   if (!loan) {
     throw new CustomError.BadRequestError("No loan to confirmed with that ID");
@@ -240,5 +240,26 @@ exports.approveLoan = async (req, res) => {
       "This loan cannot be approved with this link, please ask for another link approval"
     );
   }
+
+  // Commented for dev purposes think about to uncomment afterward
+  
+  // await loan.update({
+  //   type: "confirmed",
+  //   verification_token: "",
+  // })
+  // await loan.save();
+
+  const loanTX = await txController.createNewLoanTransaction(loan);
+
+
+  if(!loanTX){
+    throw new CustomError.BadRequestError('We could not approve this loan, please try again later')
+  }
+
+  await txController.finalizeTx(loanTX)
+
+  res.status(StatusCodes.OK).json({
+    loanTX
+  })
   
 };

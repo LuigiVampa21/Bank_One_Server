@@ -1,8 +1,11 @@
+const {Op} = require('sequelize');
 const { StatusCodes } = require("http-status-codes");
 const crypto = require("crypto");
+
 const User = require("../models/user.model");
-const BankAccount = require("../models/bankAccount.model");
-const Transaction = require("../models/transaction.model");
+// const BankAccount = require("../models/bankAccount.model");
+// const Transaction = require("../models/transaction.model");
+
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
 const sendNewLoan = require("../email/sendNewLoan");
@@ -56,3 +59,5 @@ exports.createNewLoan = async (req, res) => {
     data: loan,
   });
 };
+
+
