@@ -24,6 +24,15 @@ Transaction.belongsTo(BankAccount, {
   onUpdate: "CASCADE",
 });
 
+BankAccount.hasMany(Loan, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+Loan.belongsTo(BankAccount, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 (async () => {
   try {

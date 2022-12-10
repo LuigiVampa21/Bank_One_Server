@@ -2,8 +2,8 @@ const { sequelize } = require("../config/connectDB");
 const { DataTypes } = require("sequelize");
 // const CustomError = require("../errors");
 
-const BankAccount = sequelize.define(
-  "BankAccount",
+const Loan = sequelize.define(
+  "Loan",
   {
     id: {
       type: DataTypes.UUID,
@@ -29,17 +29,15 @@ const BankAccount = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        max: {
-          args: 300,
-          msg: "We don't lend for more than 25years",
-        },
-        min: {
-          args: 12,
-          args: "The minimum loan is up to 1 year",
-        },
+        max: 300,
+        min: 12,
       },
     },
     monthly_payment: {
+      type: DataTypes.DECIMAL(12, 2),
+      allowNull: false,
+    },
+    rate: {
       type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
@@ -47,14 +45,8 @@ const BankAccount = sequelize.define(
       type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
       validate: {
-        max: {
-          args: 500000,
-          msg: "We ain't providing more than $500'000 by loan and by user",
-        },
-        min: {
-          args: 1000,
-          args: "Minimum loan is up to $1000",
-        },
+        max: 500000,
+        min: 1000,
       },
     },
     verification_token: {
@@ -79,4 +71,4 @@ const BankAccount = sequelize.define(
   }
 );
 
-module.exports = BankAccount;
+module.exports = Loan;
