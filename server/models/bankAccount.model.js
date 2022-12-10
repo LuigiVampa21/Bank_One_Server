@@ -17,12 +17,12 @@ const BankAccount = sequelize.define(
       // type: DataTypes.ENUM({
       //   values: ["checking", "savings", "investments"],
       // }),
-      validate: {
-        isIn: {
-          args: [["checking", "savings", "investments"]],
-          msg: "Account must be either checking, savings or investments",
-        },
-      },
+      // validate: {
+      //   isIn: {
+      //     args: [["checking", "savings", "investments"]],
+      //     msg: "Account must be either checking, savings or investments",
+      //   },
+      // },
     },
     iban: {
       type: DataTypes.STRING,

@@ -36,6 +36,9 @@ app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
 app.use("/api/v1/bankone/loans", loanRoute);
 
+const bkmRoute = require("./routes/bankAccount.route");
+app.use("/api/v1/bankone/bank-account-master", bkmRoute);
+
 app.use(notFound);
 app.use(errorHandler);
 

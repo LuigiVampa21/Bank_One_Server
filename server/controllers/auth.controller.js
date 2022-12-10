@@ -4,6 +4,7 @@ const crypto = require("crypto");
 
 const User = require("../models/user.model");
 const Transaction = require("../models/transaction.model");
+const Loan = require("../models/loan.model");
 const txController = require("../controllers/transaction.controller");
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
@@ -226,4 +227,18 @@ exports.confirmTx = async (req, res) => {
   res.status(StatusCodes.OK).json({
     transaction,
   });
+};
+
+exports.approveLoan = async (req, res) => {
+  const { token, lnid } = req.params;
+  const loan = await Loan.findByPk(lnid);
+  if (!loan) {
+    throw new CustomError.BadRequestError("No loan to confirmed with that ID");
+  }
+  if (hashString(loan.verification_token) !== token) {
+    throw new CustomError.BadRequestError(
+      "This loan cannot be approved with this link, please ask for another link approval"
+    );
+  }
+  
 };
