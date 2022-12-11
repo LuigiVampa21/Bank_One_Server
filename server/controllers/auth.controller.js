@@ -243,11 +243,11 @@ exports.approveLoan = async (req, res) => {
 
   // Commented for dev purposes think about to uncomment afterward
   
-  // await loan.update({
-  //   type: "confirmed",
-  //   verification_token: "",
-  // })
-  // await loan.save();
+  await loan.update({
+    type: "confirmed",
+    verification_token: "",
+  })
+  await loan.save();
 
   const loanTX = await txController.createNewLoanTransaction(loan);
 

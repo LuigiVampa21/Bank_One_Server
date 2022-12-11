@@ -1,7 +1,6 @@
 const { sequelize } = require("../config/connectDB");
 const { DataTypes } = require("sequelize");
 const zlib = require("zlib");
-// const bcrypt = require("bcryptjs");
 const CustomError = require("../errors");
 
 const Transaction = sequelize.define(
