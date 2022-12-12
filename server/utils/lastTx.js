@@ -24,6 +24,7 @@ txArray.sort((a,b) => {
 if(type === 'lastTX'){
     return txArray[0]
 }
+
 return txArray
 
 }

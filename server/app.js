@@ -36,7 +36,7 @@ app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
 app.use("/api/v1/bankone/loans", loanRoute);
-app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
+// app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 
 
 // MASTER BANK ACCOUNT PRIVATE

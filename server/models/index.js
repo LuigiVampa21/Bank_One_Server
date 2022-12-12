@@ -3,6 +3,7 @@ const User = require("./user.model");
 const BankAccount = require("./bankAccount.model");
 const Transaction = require("./transaction.model");
 const Loan = require("./loan.model");
+const Card = require('./card.model');
 
 User.hasMany(BankAccount, {
   onDelete: "CASCADE",
@@ -33,6 +34,20 @@ Loan.belongsTo(BankAccount, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
+// One bankAccount can have multiple cards but one card belongs to only one Bank Account
+// At The creation of a bank Account we initiate a Digital Card and the user will then be able to apply for a physical one
+BankAccount.hasMany(Card, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+Card.belongsTo(BankAccount, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+
 
 (async () => {
   try {

@@ -5,10 +5,12 @@ const crypto = require("crypto");
 const User = require("../models/user.model");
 const Transaction = require("../models/transaction.model");
 const Loan = require("../models/loan.model");
-const txController = require("../controllers/transaction.controller");
+const txController = require("./transaction.controller");
 const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
 const generateIBAN = require("../utils/generateIBAN");
+const cardFactory = require('../utils/initCard')
+
 const sendVerificationEmail = require("../email/sendVerificationEmail");
 const sendResetPasswordEmail = require("../email/sendResetPassword");
 
@@ -71,7 +73,7 @@ exports.register = async (req, res) => {
   );
 
   res.status(StatusCodes.CREATED).json({
-    data: user,
+    user,
   });
 };
 
@@ -100,6 +102,18 @@ exports.login = async (req, res) => {
     token: jwtToken,
   });
 };
+
+exports.logout = async(req,res)=> {
+  const user = await User.findByPk(req.user)
+  user.update({
+    last_active: new Date()
+  })
+  user.save();
+  req.user = ""
+  res.status(StatusCodes.OK).json({
+    msg: 'logout succesfull'
+  })
+}
 
 exports.verifyEmail = async (req, res) => {
   const { token, email } = req.query;
@@ -131,11 +145,15 @@ exports.verifyEmail = async (req, res) => {
     await account.save();
   });
 
+  const card = await cardFactory(userAccounts,user)
+
   res.status(StatusCodes.OK).json({
     user,
+    card,
     msg: "Your email has been verified",
   });
 };
+
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -263,3 +281,4 @@ exports.approveLoan = async (req, res) => {
   })
   
 };
+
