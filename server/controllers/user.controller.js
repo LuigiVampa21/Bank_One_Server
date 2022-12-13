@@ -6,15 +6,20 @@ const lastTXFn = require('../utils/lastTx');
 const getBeneficiary = require('../utils/txBeneficiary')
 
 exports.getOverview = async(req,res) => {
-  const user = await User.findByPk(req.user)
-  const accounts = await user.getBankAccounts()
-  const lastTransaction = await lastTXFn(accounts, 'lastTX')
-  const beneficiaryName = await getBeneficiary(lastTransaction);
+  // const user = await User.findByPk(req.user)
+  const userID = req.user
+  // const accounts = await user.getBankAccounts()
+  let beneficiaryName;
+  const {accounts, lastTx} = await lastTXFn(userID, 'lastTX');
+  // console.log(lastTransaction);
+  if(lastTx){
+    beneficiaryName = await getBeneficiary(lastTx);
+  }
   // Can not add attribute on model after creation, will add to pass it as an argument, will try something ele later on
-  lastTransaction.beneficiary_name = beneficiaryName;
+  // lastTransaction.beneficiary_name = beneficiaryName;
   res.status(StatusCodes.OK).json({
       accounts,
-      lastTransaction, 
+      lastTx, 
       beneficiaryName
   })
 }
