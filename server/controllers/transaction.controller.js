@@ -6,6 +6,7 @@ const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
 const crypto = require("crypto");
+const checkType = require('../utils/checkTXType')
 
 exports.getAllTx = async (req, res) => {
   const txs = await Transaction.findAll();
@@ -44,6 +45,18 @@ exports.createNewTx = async (req, res) => {
   }
   const txToken = crypto.randomBytes(70).toString("hex");
 
+    // Possible to check 2nd tyme is type === internal
+
+  const isInternal = await checkType(user, beneficiary);
+
+if(type === 'internal' && !isInternal){
+  throw new CustomError.BadRequestError('Sorry wrong transaction type')
+}
+
+if(type === 'external' && isInternal){
+  throw new CustomError.BadRequestError('Sorry wrong transaction type')
+}
+
   const transaction = await Transaction.create({
     amount,
     description,
@@ -65,9 +78,11 @@ exports.createNewTx = async (req, res) => {
     beneficiary,
   });
   await transaction.setBankAccount(bankAccount);
+
   res.status(StatusCodes.OK).json({
-    bankAccount,
-    transaction,
+    // bankAccount,
+    // transaction,
+    typeTX
   });
 };
 

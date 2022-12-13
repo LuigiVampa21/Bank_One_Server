@@ -1,5 +1,5 @@
-const Card = require('../models/card.model');
-const BankAccount = require('../models/bankAccount.model');
+// const Card = require('../models/card.model');
+// const BankAccount = require('../models/bankAccount.model');
 const generator = require('creditcard-generator')
 
 const cardFactory = async (accounts, user) => {
