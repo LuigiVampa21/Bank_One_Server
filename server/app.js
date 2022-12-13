@@ -16,7 +16,8 @@ const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
 const txRoute = require("./routes/transaction.route");
 const loanRoute = require("./routes/loan.route");
-const bankAccountRoute = require('./routes/bankAccount.route');
+// const bankAccountRoute = require('./routes/bankAccount.route');
+const cardRoute = require('./routes/card.route');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -36,7 +37,9 @@ app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
 app.use("/api/v1/bankone/loans", loanRoute);
+app.use("/api/v1/bankone/cards", cardRoute);
 // app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
+// app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
 
 
 // MASTER BANK ACCOUNT PRIVATE

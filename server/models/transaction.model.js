@@ -79,6 +79,7 @@ const Transaction = sequelize.define(
     },
     beneficiary_name:{
       type: DataTypes.STRING,
+      // defaultValue: 'Sirikone KEOHAVONG'
     }
 
   },

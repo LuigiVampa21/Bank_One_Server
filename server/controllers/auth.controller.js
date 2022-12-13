@@ -145,7 +145,7 @@ exports.verifyEmail = async (req, res) => {
     await account.save();
   });
 
-  const card = await cardFactory(userAccounts,user)
+  const card = await cardFactory(userAccounts,user, 'digital')
 
   res.status(StatusCodes.OK).json({
     user,

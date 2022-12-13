@@ -2,7 +2,7 @@
 // const BankAccount = require('../models/bankAccount.model');
 const generator = require('creditcard-generator')
 
-const cardFactory = async (accounts, user) => {
+const cardFactory = async (accounts, user, type) => {
     const {first_name, last_name} = user
     const account = [...accounts].filter(a => a.type === 'checking')[0]
     const card_numbers = generator.GenCC("VISA");
@@ -13,7 +13,7 @@ const cardFactory = async (accounts, user) => {
     const expiration_date = `${month}/${year}`
 
     const card = await account.createCard({
-        type: 'digital',
+        type: type,
         card_numbers,
         placeholder,
         cvc,
