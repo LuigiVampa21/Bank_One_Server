@@ -23,22 +23,25 @@ const Transaction = sequelize.define(
         notIn: [[0.0]],
       },
     },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [15, 100],
-      },
-      set(value) {
-        const comrpessed = zlib.deflateSync(value).toString("base64");
-        this.setDataValue("description", comrpessed);
-      },
-      get() {
-        const value = this.getDataValue("description");
-        const uncompressed = zlib.inflateSync(Buffer.from(value, "base64"));
-        return uncompressed;
-      },
-    },
+
+    // Commented for dev purposes, cause it takes to much space when requesteing on PSOtman think about to uncomment in prod THANK YOU
+
+    // description: {
+      // type: DataTypes.STRING,
+    //   allowNull: false,
+    //   validate: {
+    //     len: [15, 100],
+    //   },
+    //   set(value) {
+    //     const comrpessed = zlib.deflateSync(value).toString("base64");
+    //     this.setDataValue("description", comrpessed);
+    //   },
+    //   get() {
+    //     const value = this.getDataValue("description");
+    //     const uncompressed = zlib.inflateSync(Buffer.from(value, "base64"));
+    //     return uncompressed;
+    //   },
+    // },
     type: {
       type: DataTypes.STRING,
       validate: {
@@ -69,6 +72,9 @@ const Transaction = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: null,
     },
+    inflow: {
+      type: DataTypes.BOOLEAN,
+    }
   },
   {
     paranoid: true,

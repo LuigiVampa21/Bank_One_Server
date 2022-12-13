@@ -11,6 +11,10 @@ router
   .post(transactionController.createNewTx);
 
 router
+  .route('/user')
+  .get(authMiddleware.checkToken, transactionController.getAllUserTxs)
+
+router
   .route("/documents")
   .get(
     authMiddleware.checkToken,
