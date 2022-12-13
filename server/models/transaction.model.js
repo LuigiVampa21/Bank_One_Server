@@ -2,6 +2,7 @@ const { sequelize } = require("../config/connectDB");
 const { DataTypes } = require("sequelize");
 const zlib = require("zlib");
 const CustomError = require("../errors");
+const getBeneficiary = require('../utils/txBeneficiary')
 
 const Transaction = sequelize.define(
   "Transaction",
@@ -40,6 +41,7 @@ const Transaction = sequelize.define(
     //     const value = this.getDataValue("description");
     //     const uncompressed = zlib.inflateSync(Buffer.from(value, "base64"));
     //     return uncompressed;
+    //     return uncompressed.toString();
     //   },
     // },
     type: {
@@ -74,7 +76,11 @@ const Transaction = sequelize.define(
     },
     inflow: {
       type: DataTypes.BOOLEAN,
+    },
+    beneficiary_name:{
+      type: DataTypes.STRING,
     }
+
   },
   {
     paranoid: true,

@@ -8,7 +8,8 @@ const Transaction = require("../models/transaction.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
 const crypto = require("crypto");
 const checkType = require('../utils/checkTXType');
-const findAndSortTx = require('../utils/lastTx')
+const findAndSortTx = require('../utils/lastTx');
+const getBeneficiary = require("../utils/txBeneficiary");
 
 exports.getAllTx = async (req, res) => {
   const txs = await Transaction.findAll();
@@ -71,6 +72,11 @@ if(type === 'external' && isInternal){
       "Oops, something went wrong, please try again later!"
     );
   }
+
+  const beneficiary_name = await getBeneficiary(transaction);
+  await transaction.update({beneficiary_name})
+  await transaction.save()
+
   await sendNewTransaction({
     name: user.first_name,
     transaction: transaction.id,
@@ -90,8 +96,10 @@ if(type === 'external' && isInternal){
 exports.getSingleTx = async (req, res) => {
   const { id } = req.params;
   const tx = await Transaction.findByPk(id);
+  // console.log(tx.beneficiary_name);
+  const name = tx.beneficiary_name;
   res.status(StatusCodes.OK).json({
-    tx,
+    name
   });
 };
 
@@ -177,7 +185,6 @@ exports.getAllUserTxs = async(req,res) =>{
   // // So next time someone will ask for this txs he'll be able to set or not the in attribute depends is he is sender or receiver
 
   // const allTxs = [...txFromUser, ...txToUser];
-
   // allTxs.sort((a,b) => {
   //   return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   // }, 0)

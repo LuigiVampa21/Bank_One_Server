@@ -1,9 +1,8 @@
-const { Sequelize } = require("sequelize");
 const User = require("../models/user.model");
-const BankAccount = require('../models/bankAccount.model');
 const { StatusCodes } = require('http-status-codes');
 const lastTXFn = require('../utils/lastTx');
-const getBeneficiary = require('../utils/txBeneficiary')
+const getBeneficiary = require('../utils/txBeneficiary');
+const BankAccount = require("../models/bankAccount.model");
 
 exports.getOverview = async(req,res) => {
   // const user = await User.findByPk(req.user)
@@ -26,7 +25,7 @@ exports.getOverview = async(req,res) => {
 
 exports.getAllUsers = async (req, res) => {
   const users = await User.findAll({
-    // include: [Address, ShoppingCart],
+    include: [BankAccount],
   });
   res.status(200).json({
     results: users.length,
