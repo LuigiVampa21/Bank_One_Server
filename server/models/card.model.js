@@ -45,7 +45,7 @@ const Card = sequelize.define(
       defaultValue: true,
     },
     expiration_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       isDate: true,
     //   Replace by function after + ADD ISAfter
       allowNull: false,
