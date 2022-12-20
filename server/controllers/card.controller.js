@@ -24,3 +24,15 @@ exports.createCard = async(req,res) => {
     })    
 }
 
+exports.updateCardInsurances = async(req,res) =>{
+    const {id} = req.params;
+    const card = await Card.findByPk(id);
+    const newCard = await card.update({
+        insurances: true
+    }) 
+    newCard.save();
+    res.status(StatusCodes.OK).json({
+        newCard
+    })
+}
+

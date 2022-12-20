@@ -44,6 +44,10 @@ const Card = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    insurances: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     expiration_date: {
       type: DataTypes.STRING,
       isDate: true,

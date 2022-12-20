@@ -11,7 +11,7 @@ router
 
 router.route('/user').get(authMiddleware.checkToken, cardController.getAllUserCards)
 
-// router.route("/:id").get(cardController.getSingleCard);
+router.route("/:id").patch(cardController.updateCardInsurances);
 
 
 module.exports = router;
