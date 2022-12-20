@@ -88,6 +88,9 @@ exports.login = async (req, res) => {
   if (!user)
     throw new CustomError.BadRequestError("No user found with that email");
 
+  if(!user.is_active)
+    throw new CustomError.UnauthorizeError('Check your mailbox to confirm your account')
+
   const comparePassword = await user.checkPassword(password);
   if (!comparePassword)
     throw new CustomError.BadRequestError("Passwords does not match");
