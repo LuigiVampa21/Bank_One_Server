@@ -10,6 +10,8 @@ const CustomError = require("../errors");
 const hashString = require("../utils/createHash");
 const generateIBAN = require("../utils/generateIBAN");
 const cardFactory = require('../utils/initCard')
+const getDigitalCardFromBankAccountID = require('../utils/getDigitalCardFromBankAccountID');
+const addInsurancesOnCards = require('../utils/addInsurancesOnCards')
 
 const sendVerificationEmail = require("../email/sendVerificationEmail");
 const sendResetPasswordEmail = require("../email/sendResetPassword");
@@ -284,4 +286,29 @@ exports.approveLoan = async (req, res) => {
   })
   
 };
+
+exports.approveInsurance = async(req,res) => {
+  const {token, acc: accountID } = req.query;
+  if(!token || !accountID)
+  throw new CustomError.BadRequestError('Missing info, please try this link again from your mailbox');
+
+  const digitalCard = await getDigitalCardFromBankAccountID(accountID);
+  const hashedInsuranceToken = hashString(digitalCard.insurance_token);
+  if(hashedInsuranceToken !== token)
+  throw new CustomError.BadRequestError('Something went wrong during authentication, please try again');
+
+  const cards = await addInsurancesOnCards(accountID);
+  if(!cards)
+  throw new CustomError.BadRequestError('Oops something went wrong, Please try again later!')
+
+  await digitalCard.update({
+    insurance_token: null
+  })
+  await digitalCard.save()
+
+  res.status(StatusCodes.OK).json({
+    cards
+  })
+
+}
 

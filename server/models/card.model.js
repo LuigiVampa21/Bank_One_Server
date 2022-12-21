@@ -44,7 +44,7 @@ const Card = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
-    insurances: {
+    insurance: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
@@ -53,6 +53,10 @@ const Card = sequelize.define(
       isDate: true,
     //   Replace by function after + ADD ISAfter
       allowNull: false,
+    },
+    insurance_token: {
+      type: DataTypes.STRING,
+      defaultValue: null
     },
   },
   {
