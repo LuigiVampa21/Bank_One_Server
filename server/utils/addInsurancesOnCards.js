@@ -6,6 +6,7 @@ const cards = await account.getCards()
 for (const card of cards){
     await card.update({
         insurance: true
+        // insurance: false
     })
     await card.save()
 }

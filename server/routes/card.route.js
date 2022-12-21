@@ -16,4 +16,16 @@ router.route("/:id").patch(
   cardController.updateCardInsurances);
 
 
+
+// DEV PURPOSES
+
+const addInsurancesOnCards = require('../utils/addInsurancesOnCards')
+
+router.route('/insurance').post(async (req,res) => {
+  const cards = await addInsurancesOnCards('a58f1175-bf38-483a-a42f-35ccf3b60cc4')
+  res.status(200).json({
+    cards
+  })
+})
+
 module.exports = router;
