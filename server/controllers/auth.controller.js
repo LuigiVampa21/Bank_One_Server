@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const User = require("../models/user.model");
+const Card = require('../models/card.model')
 const Transaction = require("../models/transaction.model");
 const Loan = require("../models/loan.model");
 const txController = require("./transaction.controller");
@@ -308,6 +309,32 @@ exports.approveInsurance = async(req,res) => {
 
   res.status(StatusCodes.OK).json({
     cards
+  })
+
+}
+
+exports.approveCard = async(req,res) => {
+  const {token, card: cardID } = req.query;
+  if(!token || !cardID)
+  throw new CustomError.BadRequestError('Missing info, please try this link again from your mailbox');
+
+  let card = await Card.findByPk(cardID);
+  if(!card)
+  throw new CustomError.BadRequestError('Sorry no card seems to be requested here') 
+
+  const hashedActivationToken = hashString(card.activation_token);
+
+  if(hashedActivationToken !== token)
+  throw new CustomError.BadRequestError('Something went wrong during authentication, please try again');
+
+  card = await card.update({
+    activation_token: null,
+    is_active: true,
+  })
+  await card.save()
+
+  res.status(StatusCodes.OK).json({
+    card
   })
 
 }

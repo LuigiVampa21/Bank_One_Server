@@ -17,5 +17,6 @@ router.route("/reset-password").post(authController.resetPassword);
 router.route("/new-transaction").get(authController.confirmTx);
 router.route("/new-loan").get(authController.approveLoan);
 router.route("/insurances-approval").get(authController.approveInsurance);
+router.route("/card-approval").get(authController.approveCard);
 
 module.exports = router;

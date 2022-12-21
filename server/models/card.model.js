@@ -58,6 +58,10 @@ const Card = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: null
     },
+    activation_token: {
+      type: DataTypes.STRING,
+      defaultValue: null
+    }
   },
   {
     paranoid: true,
