@@ -54,11 +54,14 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
+const createCryptoAsset = require('./trading-routes/crypto.route')
+
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
+  await createCryptoAsset()
   // setInterval(() => {
-  //   console.log('Hiiya');
-  // }, 2000)
+  //   UPDATE PRICE OF ASSETS
+  // }, 600000)
   await connectDB();
 });

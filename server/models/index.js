@@ -4,6 +4,7 @@ const BankAccount = require("./bankAccount.model");
 const Transaction = require("./transaction.model");
 const Loan = require("./loan.model");
 const Card = require('./card.model');
+const Asset = require('./asset.model')
 
 User.hasMany(BankAccount, {
   onDelete: "CASCADE",
