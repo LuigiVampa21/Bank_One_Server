@@ -38,8 +38,13 @@ app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
 app.use("/api/v1/bankone/loans", loanRoute);
 app.use("/api/v1/bankone/cards", cardRoute);
+// app.use('/api/v1/bankone/tradings')
+
 // app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 // app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
+
+// THOSE Routes are not-client-guided they  will be called programmtically through a pre-defined interval except for dev TESTING
+
 
 
 // MASTER BANK ACCOUNT PRIVATE
@@ -52,5 +57,8 @@ app.use(errorHandler);
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
+  // setInterval(() => {
+  //   console.log('Hiiya');
+  // }, 2000)
   await connectDB();
 });
