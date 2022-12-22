@@ -1,13 +1,18 @@
 // const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
 const User = require("../models/user.model");
-const { Op } = require("sequelize");
+const findAndSortTx = require('../utils/lastTx')
+// const { Op } = require("sequelize");
+
+// THIS MIDDLEWARE WAS GREAT BUT EVENTUALLY WE NEED TO CHANGE IT BECAUSE IT ONLY TAKES INTO ACCOUNT TXS 
+// FROM THE USER AND NOT TXS RECEIVED BYH HIM
+
+// FIRSTLY WE GONNA USE THE LASTTX MIDDLEWARE TO GET ALL THE TXS AND THEN WE WILL FILTER
 
 exports.customQuery = async (req, res, next) => {
   let transactions = [];
-  let accounts;
-  let account;
-  let accountCreationDate;
+  // let accounts;
+  // let account;
   // let accounts = await BankAccount.findAll({
   //   where: {
   //     [Op.and]: [
@@ -21,43 +26,51 @@ exports.customQuery = async (req, res, next) => {
 
   // Filter by account
 
-  const { id } = req.user;
-  const user = await User.findByPk(id);
+  const user = await User.findByPk(req.user);
+  const accounts = await user.getBankAccounts();
+  const accountCreationDate = accounts[0].createdAt;
 
   // needs to filter with req.user to only get bank from userID
 
   const queryObj = { ...req.query };
   if (queryObj.account === "all") {
-    accounts = await BankAccount.findAll();
-    accountCreationDate = accounts[0].createdAt;
-    for (const account of accounts) {
-      const accountTxs = await account.getTransactions();
-      for (const a of accountTxs) {
-        transactions.push({
-          id: a.id,
-          type: a.type,
-          amount: a.amount,
-          createdAt: a.createdAt,
-        });
-      }
-    }
+    // accounts = await user.getBankAccounts();
+    // accountCreationDate = accounts[0].createdAt;
+    // for (const account of accounts) {
+    //   const accountTxs = await account.getTransactions();
+    //   for (const a of accountTxs) {
+    //     transactions.push({
+    //       id: a.id,
+    //       type: a.type,
+    //       amount: a.amount,
+    //       createdAt: a.createdAt,
+    //     });
+    //   }
+
+    transactions = await findAndSortTx(req.user, 'allTxs')
+   
+    // OK HERE
+  
   }
   if (queryObj.account !== "all") {
-    account = await BankAccount.findOne({
-      where: {
-        type: queryObj.account,
-      },
-    });
-    accountCreationDate = account.createdAt;
-    const accountTxs = await account.getTransactions();
-    for (const a of accountTxs) {
-      transactions.push({
-        id: a.id,
-        type: a.type,
-        amount: a.amount,
-        createdAt: a.createdAt,
-      });
-    }
+    // account = await BankAccount.findOne({
+    //   where: {
+    //     type: queryObj.account,
+    //   },
+    // });
+    // accountCreationDate = account.createdAt;
+    // const accountTxs = await account.getTransactions();
+    // for (const a of accountTxs) {
+    //   transactions.push({
+    //     id: a.id,
+    //     type: a.type,
+    //     amount: a.amount,
+    //     createdAt: a.createdAt,
+    //   });
+  // }
+    transactions = await findAndSortTx(req.user, 'allTxs', queryObj.account)
+   
+    // OK HERE
   }
 
   // Filter by type
