@@ -43,7 +43,11 @@ app.use("/api/v1/bankone/cards", cardRoute);
 // app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 // app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
 
-// THOSE Routes are not-client-guided they  will be called programmtically through a pre-defined interval except for dev TESTING
+// THOSE Routes are not-client-guided they will be called programmtically through a pre-defined interval except for dev TESTING
+// OR CREATING ASSETS
+
+const stocksRoute = require('./trading-routes/stocks.route')
+app.use('/api/v1/bankone/stocks', stocksRoute)
 
 
 
@@ -54,14 +58,19 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-const createCryptoAsset = require('./trading-routes/crypto.route')
+// const createCryptoAsset = require('./trading-routes/crypto.route')
 
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
-  await createCryptoAsset()
+
+  await connectDB();
+
+  // CREATA CRYPTO ASSET
+  // await createCryptoAsset()
+
   // setInterval(() => {
   //   UPDATE PRICE OF ASSETS
   // }, 600000)
-  await connectDB();
+  
 });
