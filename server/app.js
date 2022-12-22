@@ -18,6 +18,7 @@ const txRoute = require("./routes/transaction.route");
 const loanRoute = require("./routes/loan.route");
 // const bankAccountRoute = require('./routes/bankAccount.route');
 const cardRoute = require('./routes/card.route');
+const assetRoute = require('./routes/asset.route')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -38,18 +39,18 @@ app.use("/api/v1/bankone/users", userRoute);
 app.use("/api/v1/bankone/transactions", txRoute);
 app.use("/api/v1/bankone/loans", loanRoute);
 app.use("/api/v1/bankone/cards", cardRoute);
-// app.use('/api/v1/bankone/tradings')
+app.use('/api/v1/bankone/assets', assetRoute);
 
 // app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 // app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
 
 // THOSE Routes are not-client-guided they will be called programmtically through a pre-defined interval except for dev TESTING
-// OR CREATING ASSETS
+// OR CREATING ASSETS => routes starts with admin
 
 const stocksRoute = require('./trading-routes/stocks.route')
 const fxcmdtsRoute = require('./trading-routes/commodittiesForex.route')
-app.use('/api/v1/bankone/stocks', stocksRoute)
-app.use('/api/v1/bankone/fxcmdts', fxcmdtsRoute)
+app.use('/api/v1/bankone/admin/stocks', stocksRoute)
+app.use('/api/v1/bankone/admin/fxcmdts', fxcmdtsRoute)
 
 
 
