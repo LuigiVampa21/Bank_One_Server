@@ -27,8 +27,8 @@ const Asset = sequelize.define(
       // }),
       validate: {
         isIn: {
-          args: [["stock", "crypto", "commodity"]],
-          msg: "We only trade stocks, cryptos and commoditties over here",
+          args: [["stock", "crypto", "commodity", "forex"]],
+          msg: "We only trade stocks, cryptos, forex and commoditties over here",
         },
       },
     },

@@ -47,7 +47,9 @@ app.use("/api/v1/bankone/cards", cardRoute);
 // OR CREATING ASSETS
 
 const stocksRoute = require('./trading-routes/stocks.route')
+const fxcmdtsRoute = require('./trading-routes/commodittiesForex.route')
 app.use('/api/v1/bankone/stocks', stocksRoute)
+app.use('/api/v1/bankone/fxcmdts', fxcmdtsRoute)
 
 
 
@@ -59,12 +61,14 @@ app.use(notFound);
 app.use(errorHandler);
 
 // const createCryptoAsset = require('./trading-routes/crypto.route')
+// const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
   await connectDB();
+  // fxcmdtController.deleteAsset()
 
   // CREATA CRYPTO ASSET
   // await createCryptoAsset()
