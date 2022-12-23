@@ -11,6 +11,7 @@ exports.getTxsByAccount = async(req,res) => {
     }
     res.status(StatusCodes.OK).json({
         results: txs.length,
+        type,
         txs
     })
 }

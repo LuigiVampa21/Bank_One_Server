@@ -71,7 +71,7 @@ app.listen(PORT, async () => {
   await connectDB();
   // fxcmdtController.deleteAsset()
 
-  // CREATA CRYPTO ASSET
+  // CREATE CRYPTO ASSET
   // await createCryptoAsset()
 
   // setInterval(() => {

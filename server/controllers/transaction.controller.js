@@ -1,15 +1,16 @@
 const { Op } = require("sequelize");
 const { StatusCodes } = require("http-status-codes");
+const crypto = require("crypto");
 
 const CustomError = require("../errors");
-const User = require("../models/user.model");
+// const User = require("../models/user.model");
 const BankAccount = require("../models/bankAccount.model");
 const Transaction = require("../models/transaction.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
-const crypto = require("crypto");
 const checkType = require('../utils/checkTXType');
 const findAndSortTx = require('../utils/txsResolver');
 const getBeneficiary = require("../utils/txBeneficiary");
+const {addToSenderKnowAccounts} = require('../utils/addToKnownAccounts');
 
 exports.getAllTx = async (req, res) => {
   const txs = await Transaction.findAll();
@@ -86,6 +87,9 @@ if(type === 'external' && isInternal){
     beneficiary,
   });
   await transaction.setBankAccount(bankAccount);
+  if(type === 'external'){
+    await addToSenderKnowAccounts(user, beneficiary)
+  }
 
   res.status(StatusCodes.OK).json({
     bankAccount,

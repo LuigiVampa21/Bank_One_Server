@@ -120,6 +120,10 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    known_accounts: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: []
+    },
     reset_password_token: {
       type: DataTypes.STRING,
       defaultValue: null,
