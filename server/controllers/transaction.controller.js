@@ -20,8 +20,9 @@ exports.getAllTx = async (req, res) => {
 };
 
 exports.createNewTx = async (req, res) => {
-  const { account, amount, description, type, beneficiary } = req.body;
-  if (!account || !amount || !description || !type || !beneficiary) {
+  const { accountSending: account, amount, description, intext: type, accountReceiving: beneficiary } = req.body;
+  // if (!account || !amount || !description || !type || !beneficiary) {
+  if (!account || !amount || !type || !beneficiary) {
     throw new CustomError.BadRequestError(
       "Cannot validate your transaction, missing informations"
     );

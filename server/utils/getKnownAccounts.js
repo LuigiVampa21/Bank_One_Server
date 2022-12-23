@@ -1,4 +1,5 @@
 const User = require('../models/user.model')
+const getCheckingAccountFromUserID = require('./getCheckingAccountFromUserID')
 
 const getKnownAccounts = async(userID) => {
 
@@ -8,10 +9,13 @@ const getKnownAccounts = async(userID) => {
 
     for (const id of knownAccounts){
         const user = await User.findByPk(id);
+        const checkingAccount = await getCheckingAccountFromUserID(id)
+        const {iban} = checkingAccount; 
         knownAccountsObj = [...knownAccountsObj, {
             id: user.id,
             firstName: user.first_name,
             lastName: user.last_name,
+            iban 
         }]
     }
 

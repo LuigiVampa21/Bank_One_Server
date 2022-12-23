@@ -8,7 +8,7 @@ const transactionController = require("../controllers/transaction.controller");
 router
   .route("/")
   .get(transactionController.getAllTx)
-  .post(transactionController.createNewTx);
+  .post(authMiddleware.checkToken, transactionController.createNewTx);
 
 router
   .route('/user')
