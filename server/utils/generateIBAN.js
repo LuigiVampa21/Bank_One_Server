@@ -14,6 +14,6 @@ const generateIBAN = () => {
   return iban.substring(0, 18);
 };
 
-console.log(generateIBAN());
+// console.log(generateIBAN());
 
 module.exports = generateIBAN;

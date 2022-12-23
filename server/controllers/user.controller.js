@@ -3,7 +3,8 @@ const BankAccount = require("../models/bankAccount.model");
 const { StatusCodes } = require('http-status-codes');
 const lastTXFn = require('../utils/txsResolver');
 const getBeneficiary = require('../utils/txBeneficiary');
-const sortingAccounts = require('../utils/sortingAccountConvention')
+const sortingAccounts = require('../utils/sortingAccountConvention');
+const getKnownAccounts = require('../utils/getKnownAccounts');
 
 exports.getOverview = async(req,res) => {
   // const user = await User.findByPk(req.user)
@@ -15,12 +16,14 @@ exports.getOverview = async(req,res) => {
   if(lastTx){
     beneficiaryName = await getBeneficiary(lastTx);
   }
+  const knownAccounts = await getKnownAccounts(req.user)
   // Can not add attribute on model after creation, will add to pass it as an argument, will try something ele later on
   // lastTransaction.beneficiary_name = beneficiaryName;
   res.status(StatusCodes.OK).json({
       accounts,
       lastTx, 
-      beneficiaryName
+      beneficiaryName,
+      knownAccounts
   })
 }
 

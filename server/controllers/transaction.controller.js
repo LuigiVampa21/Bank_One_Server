@@ -10,7 +10,7 @@ const sendNewTransaction = require("../email/sendNewTransaction");
 const checkType = require('../utils/checkTXType');
 const findAndSortTx = require('../utils/txsResolver');
 const getBeneficiary = require("../utils/txBeneficiary");
-const {addToSenderKnowAccounts} = require('../utils/addToKnownAccounts');
+const {addToSenderKnownAccounts, addToReceiverKnownAccounts} = require('../utils/addToKnownAccounts');
 
 exports.getAllTx = async (req, res) => {
   const txs = await Transaction.findAll();
@@ -88,7 +88,7 @@ if(type === 'external' && isInternal){
   });
   await transaction.setBankAccount(bankAccount);
   if(type === 'external'){
-    await addToSenderKnowAccounts(user, beneficiary)
+    await addToSenderKnownAccounts(user, beneficiary)
   }
 
   res.status(StatusCodes.OK).json({
@@ -128,6 +128,7 @@ exports.finalizeTx = async transaction => {
   await accountReceiving.increment("amount", {
     by: amount,
   });
+  await addToReceiverKnownAccounts(accountSending, accountReceiving)
 };
 
 exports.searchDocs = async (req, res) => {
