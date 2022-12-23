@@ -54,14 +54,13 @@ const findAndSortTx = async (userID, type, accountQuery=null) => {
     const user = await User.findByPk(userID)
     let accounts = await user.getBankAccounts(); 
     if(accountQuery !== null){
-      accounts = [...accounts].filter(a => a.type === accountQuery)[0]
-      console.log(accounts);
+      accounts = [...accounts].filter(a => a.type === accountQuery)
     }
-    for (const account of accounts){
-      userIBANs = [...userIBANs, account.iban];
-      const txFromAccount = await account.getTransactions();
-      txFromUser = [... txFromUser, ...txFromAccount];
-    }
+      for (const account of accounts){
+        userIBANs = [...userIBANs, account.iban];
+        const txFromAccount = await account.getTransactions();
+        txFromUser = [... txFromUser, ...txFromAccount];
+      }
     // const txFromUser = await user
     // Searching into All DB Txs does not seems really scalable as the application grows, we'll need to change the model 
     // of as many to many and set an association table with a user sending and a user receiving

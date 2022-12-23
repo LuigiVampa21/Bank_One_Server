@@ -1,8 +1,9 @@
 const User = require("../models/user.model");
-const { StatusCodes } = require('http-status-codes');
-const lastTXFn = require('../utils/lastTx');
-const getBeneficiary = require('../utils/txBeneficiary');
 const BankAccount = require("../models/bankAccount.model");
+const { StatusCodes } = require('http-status-codes');
+const lastTXFn = require('../utils/txsResolver');
+const getBeneficiary = require('../utils/txBeneficiary');
+const sortingAccounts = require('../utils/sortingAccountConvention')
 
 exports.getOverview = async(req,res) => {
   // const user = await User.findByPk(req.user)
@@ -22,6 +23,15 @@ exports.getOverview = async(req,res) => {
       beneficiaryName
   })
 }
+
+exports.getUserAccounts = async(req,res) => {
+  const user = await User.findByPk(req.user)
+  let accounts = await user.getBankAccounts();
+  accounts = sortingAccounts(accounts)
+  res.status(StatusCodes.OK).json({
+    accounts
+  })
+} 
 
 exports.getAllUsers = async (req, res) => {
   const users = await User.findAll({

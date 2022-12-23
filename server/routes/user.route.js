@@ -8,6 +8,7 @@ const authMiddleware = require('../middlewares/authMiddleware')
 router.route("/").get(userController.getAllUsers);
 
 router.route('/overview').get(authMiddleware.checkToken,userController.getOverview);
+router.route('/accounts').get(authMiddleware.checkToken,userController.getUserAccounts);
 
 router
   .route("/:id")

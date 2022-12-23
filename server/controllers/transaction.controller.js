@@ -8,7 +8,7 @@ const Transaction = require("../models/transaction.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
 const crypto = require("crypto");
 const checkType = require('../utils/checkTXType');
-const findAndSortTx = require('../utils/lastTx');
+const findAndSortTx = require('../utils/txsResolver');
 const getBeneficiary = require("../utils/txBeneficiary");
 
 exports.getAllTx = async (req, res) => {

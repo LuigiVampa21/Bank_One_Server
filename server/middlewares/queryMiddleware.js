@@ -1,7 +1,7 @@
 // const Transaction = require("../models/transaction.model");
 const BankAccount = require("../models/bankAccount.model");
 const User = require("../models/user.model");
-const findAndSortTx = require('../utils/lastTx')
+const findAndSortTx = require('../utils/txsResolver')
 // const { Op } = require("sequelize");
 
 // THIS MIDDLEWARE WAS GREAT BUT EVENTUALLY WE NEED TO CHANGE IT BECAUSE IT ONLY TAKES INTO ACCOUNT TXS 
