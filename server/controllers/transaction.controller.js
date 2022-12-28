@@ -108,7 +108,7 @@ exports.getSingleTx = async (req, res) => {
   });
 };
 
-exports.finalizeTx = async transaction => {
+exports.finalizeTx = async (transaction, loan = false) => {
   const iban = transaction.beneficiary;
   const { BankAccountId: id } = transaction;
   const { amount } = transaction;
@@ -129,7 +129,10 @@ exports.finalizeTx = async transaction => {
   await accountReceiving.increment("amount", {
     by: amount,
   });
-  await addToReceiverKnownAccounts(accountSending, accountReceiving)
+  if(loan){
+    return
+  }
+    await addToReceiverKnownAccounts(accountSending, accountReceiving)
 };
 
 exports.searchDocs = async (req, res) => {
@@ -156,12 +159,14 @@ exports.createNewLoanTransaction = async (loan) => {
 
   const transaction = await masterBA.createTransaction({
     amount: loan.amount,
-    description: "Loan accorded from Bank One Ltd.",
+    description: "Loan approved from Bank One Ltd.",
     beneficiary: account.iban,
     type: "external",
     status: "settled",
 
   });
+
+  console.log(transaction.toJSON());
 
   return transaction;
 }

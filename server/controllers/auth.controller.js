@@ -109,8 +109,7 @@ exports.login = async (req, res) => {
   res.status(200).json({
     user,
     token: jwtToken,
-    // expiry: +process.env.JWT_EXPIRES_IN_SEC
-    expiry: 1
+    expiry: +process.env.JWT_EXPIRES_IN_SEC
   });
 };
 
@@ -270,7 +269,7 @@ exports.approveLoan = async (req, res) => {
     );
   }
 
-  // Commented for dev purposes think about to uncomment afterward
+  // Commented for dev purposes think about to uncomment afterwards
   
   await loan.update({
     type: "confirmed",
@@ -285,7 +284,7 @@ exports.approveLoan = async (req, res) => {
     throw new CustomError.BadRequestError('We could not approve this loan, please try again later')
   }
 
-  await txController.finalizeTx(loanTX)
+  await txController.finalizeTx(loanTX, true)
 
   res.status(StatusCodes.OK).json({
     loanTX
