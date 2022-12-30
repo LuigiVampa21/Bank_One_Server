@@ -42,7 +42,12 @@ const BankAccount = sequelize.define(
     hooks: {
       afterDestroy: async account => {
         const cards = await account.getCards();
-        cards.forEach(async card => await card.destroy());
+        cards.forEach(async card => {
+          await card.update({
+            is_active: false
+          })
+          await card.destroy()
+        });
       },
     },
     paranoid: true,

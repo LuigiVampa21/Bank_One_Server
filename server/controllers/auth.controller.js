@@ -363,7 +363,7 @@ exports.deleteAccount = async(req,res) => {
   await user.destroy()
 
   res.status(StatusCodes.OK).json({
-    card
+    user
   })
 
 }

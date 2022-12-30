@@ -163,7 +163,11 @@ const User = sequelize.define(
         //  accounts.forEach(async account => {
         //     await account.destroy();
         //   });
-        accounts.forEach(async account => await account.destroy());
+        accounts.forEach(async account => {
+          await account.update({
+            is_active: false
+          })
+          await account.destroy()});
       },
     },
     validate: {

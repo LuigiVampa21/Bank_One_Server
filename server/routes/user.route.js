@@ -14,10 +14,11 @@ router
   .route("/:id")
   .get(userController.getSingleUser)
   .patch(
+    authMiddleware.checkToken,
     // multerMiddleware.multerM,
     userController.updateUser
   )
-  .delete(userController.deleteUser);
+  .delete(authMiddleware.checkToken, userController.deleteUser);
 
 module.exports = router;
 

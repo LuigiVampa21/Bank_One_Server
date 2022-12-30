@@ -60,16 +60,22 @@ exports.getSingleUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { firstName, lastName, email } = req.body;
+  let { firstName, lastName, email, phone, password } = req.body;
+  firstName = firstName?.toLowerCase();
+  lastName = lastName?.toLowerCase();
+  email = email?.toLowerCase();
   const user = await User.findByPk(id);
     await user.update({
-      firstName,
-      lastName,
-      email,
+      first_name :firstName,
+      last_name :lastName,
+      email: email,
+      phone_number: phone,
+      password,
     });
     await user.save();
   res.status(200).json({
     user,
+    msg: 'Credentials updated'
   });
 };
 
@@ -85,8 +91,8 @@ exports.deleteUser = async (req, res) => {
   })
   const hashedToken = hashString(verificationToken);
   await sendDeleteUserAccount(user, hashedToken)
-  res.status(204).json({
-    msg: null,
+  res.status(200).json({
+    msg: 'An email has been sent to your mailbox.',
   });
 };
 
