@@ -342,4 +342,29 @@ exports.approveCard = async(req,res) => {
   })
 
 }
+exports.deleteAccount = async(req,res) => {
+  const {token, email } = req.query;
+  if(!token || !email)
+  throw new CustomError.BadRequestError('Missing info, please try this link again from your mailbox');
+
+  const user = await User.findOne({where: {email}});
+  if(!user)
+  throw new CustomError.BadRequestError('No User Found') 
+
+  const hashedVerificationToken = hashString(user.verification_token);
+
+  if(hashedVerificationToken !== token)
+  throw new CustomError.BadRequestError('Something went wrong during authentication, please try again');
+
+  await user.update({
+    is_active: false
+  })
+
+  await user.destroy()
+
+  res.status(StatusCodes.OK).json({
+    card
+  })
+
+}
 

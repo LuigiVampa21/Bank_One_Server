@@ -39,6 +39,12 @@ const BankAccount = sequelize.define(
     },
   },
   {
+    hooks: {
+      afterDestroy: async account => {
+        const cards = await account.getCards();
+        cards.forEach(async card => await card.destroy());
+      },
+    },
     paranoid: true,
   }
 );

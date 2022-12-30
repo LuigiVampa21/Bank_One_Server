@@ -5,7 +5,7 @@ const sendResetPasswordEmail = async ({ name, email, token }) => {
   const message = `<p>Follow this link to reset your ${process.env.COMPANY_NAME} password for your ${email} account. <a href="${resetURL}">Reset Password</a></p>
   <p>Hurry up, this link will only be valid for 10 minutes.</p>
   <p>If you didn’t ask to reset your password, you can ignore this email.</p>
-  <p>Thanks</p>
+  <p>Best Regards</p>
   <p>${process.env.COMPANY_NAME}</p>
   `;
 

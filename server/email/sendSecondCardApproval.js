@@ -11,7 +11,7 @@ const sendSecondCardApproval = async ({
   const message = `<p> You want to add a physical card to your wallet. Nothing easier !
   Please follow this link to approve: <a href="${approvalLink}">Approve</a></p>
   <p>If you did not requested for that, please contact the support team</p>
-  <p>Thanks</p>
+  <p>Best Regards</p>
   <p>${process.env.COMPANY_NAME}</p>
   `;
 

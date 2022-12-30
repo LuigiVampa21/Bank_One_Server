@@ -13,7 +13,7 @@ const sendNewTransaction = async ({
   const message = `<p> A new loan of $${amount} is waiting for your approval on the account ${account}.
   Please follow this link to validate: <a href="${confirmLn}">Confirm Loan</a></p>
   <p>If you did not requested any loan, please contact the support team immediately</p>
-  <p>Thanks</p>
+  <p>Best Regards</p>
   <p>${process.env.COMPANY_NAME}</p>
   `;
 
