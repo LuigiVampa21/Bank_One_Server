@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
+const setTimer = require('./utils/setAssetUpdatingTimer');
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
@@ -67,7 +68,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
-
+  setTimer(1000)
   await connectDB();
   // fxcmdtController.deleteAsset()
 
