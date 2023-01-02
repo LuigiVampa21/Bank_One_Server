@@ -18,7 +18,7 @@ router.route("/logout").get(authMiddleware.checkToken, authController.logout);
 
 
 router.route("/verify-email").get(authController.verifyEmail);
-router.route("/forgot-password").get(authController.forgotPassword);
+router.route("/forgot-password").post(authController.forgotPassword);
 router.route("/reset-password").post(authController.resetPassword);
 router.route("/new-transaction").get(authController.confirmTx);
 router.route("/new-loan").get(authController.approveLoan);
