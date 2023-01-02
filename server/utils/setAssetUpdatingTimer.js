@@ -2,7 +2,7 @@ const cryptoController = require('../trading-controllers/crypto.controller')
 
 const cryptoUpdate = () => {
     setInterval(() => {
-    cryptoController.updateCryptoPrice()
+   cryptoController.updateCryptoPrice()
 }, 60000 )
 };
 
@@ -15,7 +15,7 @@ const autoUpdateAssets = () => {
         }
     else {
         setTimeout(function () {
-            setTimer();
+            autoUpdateAssets();
         }, (60 - currentDateSeconds) * 1000);
     }
     

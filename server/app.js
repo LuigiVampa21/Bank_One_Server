@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
-const setTimer = require('./utils/setAssetUpdatingTimer');
+const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
@@ -69,10 +69,10 @@ const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
-  // autoUpdateAssets()
+  autoUpdateAssets()
 
   // TEST
-  await require('./trading-controllers/crypto.controller').updateCryptoPrice()
+  // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
 
   await connectDB();
 
