@@ -1,10 +1,18 @@
 const cryptoController = require('../trading-controllers/crypto.controller')
+const commodittiesForexController = require('../trading-controllers/commodittiesForex.controller') 
 
 const cryptoUpdate = () => {
     setInterval(() => {
    cryptoController.updateCryptoPrice()
 }, 60000 )
 };
+
+const cmdtsForexUpdate = () => {
+    setInterval(() => {
+        commodittiesForexController.updateCmdtsForexPrice()
+        // 43,200,000 = 12H
+     }, 43200000 )
+}
 
 
 const autoUpdateAssets = () => {

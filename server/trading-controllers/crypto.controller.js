@@ -31,16 +31,16 @@ exports.updateCryptoPrice = async() => {
     for(const dataObj of assetsDataFromAPI){
         if(assetsIDFromDB.includes(dataObj.id)){
             const crypto = await Asset.findOne({where:{id: dataObj.id}})
-            console.log('-------------------------------------------------------------');
-            console.log(crypto.id, crypto.price, crypto.one_day_change);
+            // console.log('-------------------------------------------------------------');
+            // console.log(crypto.id, crypto.price, crypto.one_day_change);
             await crypto.update({
                 price: dataObj.price,
                 one_day_change: dataObj.one_day_change,
                 last_update: new Date()
             })
             await crypto.save()
-            console.log(crypto.id, crypto.price, crypto.one_day_change);
-            console.log('-------------------------------------------------------------');
+            // console.log(crypto.id, crypto.price, crypto.one_day_change);
+            // console.log('-------------------------------------------------------------');
         }
     }
 }

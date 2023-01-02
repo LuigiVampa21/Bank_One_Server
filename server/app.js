@@ -69,10 +69,11 @@ const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
-  autoUpdateAssets()
+  // autoUpdateAssets()
 
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
+  await require('./trading-controllers/commodittiesForex.controller').updateCmdtsForexPrice()
 
   await connectDB();
 
