@@ -68,8 +68,14 @@ app.use(errorHandler);
 const PORT = process.env.PORT | 4040;
 app.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
-  setTimer(1000)
+
+  // autoUpdateAssets()
+
+  // TEST
+  await require('./trading-controllers/crypto.controller').updateCryptoPrice()
+
   await connectDB();
+
   // fxcmdtController.deleteAsset()
 
   // CREATE CRYPTO ASSET
