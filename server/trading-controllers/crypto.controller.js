@@ -33,12 +33,26 @@ exports.updateCryptoPrice = async() => {
             const crypto = await Asset.findOne({where:{id: dataObj.id}})
             // console.log('-------------------------------------------------------------');
             // console.log(crypto.id, crypto.price, crypto.one_day_change);
-            await crypto.update({
-                price: dataObj.price,
-                one_day_change: dataObj.one_day_change,
-                last_update: new Date()
-            })
+            // console.log(crypto.one_day_change);
+            const last_price_db = crypto.price;
+            const last_price_api = dataObj.price;
+            // console.log(last_price_db,last_price_api);
+            
+            if(last_price_db > last_price_api){
+                await crypto.update({
+                    price: dataObj.price,
+                    one_day_change: -dataObj.one_day_change,
+                    last_update: new Date()
+                })
+            }else{
+                await crypto.update({
+                    price: dataObj.price,
+                    one_day_change: dataObj.one_day_change,
+                    last_update: new Date()
+                })
+            }
             await crypto.save()
+            // console.log(crypto.one_day_change);
             // console.log(crypto.id, crypto.price, crypto.one_day_change);
             // console.log('-------------------------------------------------------------');
         }

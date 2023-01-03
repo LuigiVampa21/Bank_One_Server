@@ -22,9 +22,11 @@ exports.createAsset = async(req,res) => {
 }
 
 exports.updateCmdtsForexPrice = async() => {
+    let ratesArrayofObject = [];
     const cmdtsForexAssetsFromDB = await Asset.findAll({where: {
         [Op.or]: [{type: 'forex'},{type: 'commodity'}]
     }});
+    const cmdtsForexIDFromDB = [...cmdtsForexAssetsFromDB].map((c,i) => c = c.id.toUpperCase());
     // const response = await axios.get(process.env.CMDTS_FOREX_UPDATE_URL, { 
     //     headers: { 
     //                 "Accept-Encoding": "gzip,deflate,compress" 
@@ -32,10 +34,25 @@ exports.updateCmdtsForexPrice = async() => {
     //  });
     // const {rates} = response.data.data;
     // console.log(rates);
-    console.log(rates);
-    // for(const asset of rates){
-    //     if()
-    // }
+
+    const ratesArray = Object.entries(rates)
+    for (const rate of ratesArray){
+        ratesArrayofObject = [...ratesArrayofObject, {id: rate[0], price: rate[1]}]
+    }
+    // console.log(ratesArrayofObject);
+    // console.log(cmdtsForexAssetsFromDB);
+    // console.log(cmdtsForexIDFromDB);
+
+    for(const asset of ratesArrayofObject){
+        if(cmdtsForexIDFromDB.includes(asset.id)){
+            const cmdt = await Asset.findOne({where: {id: asset.id}})
+            // console.log(cmdt.toJSON());
+            // await cmdt.update({
+            //     price
+            // })
+            // console.log(assetToUpdate.id, assetToUpdate.price);
+        }
+    }
 
 }
 
