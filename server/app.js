@@ -72,7 +72,7 @@ app.listen(PORT, async () => {
   // autoUpdateAssets()
 
   // TEST
-  await require('./trading-controllers/crypto.controller').updateCryptoPrice()
+  // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
   // await require('./trading-controllers/commodittiesForex.controller').updateCmdtsForexPrice()
 
   await connectDB();

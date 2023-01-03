@@ -11,6 +11,7 @@ const cmdtsForexUpdate = () => {
     setInterval(() => {
         commodittiesForexController.updateCmdtsForexPrice()
         // 43,200,000 = 12H
+    // }, 60000 )
      }, 43200000 )
 }
 
@@ -20,6 +21,7 @@ const autoUpdateAssets = () => {
     const currentDateSeconds = new Date().getSeconds();
     if (currentDateSeconds == 0) {
         cryptoUpdate()
+        cmdtsForexUpdate()
         }
     else {
         setTimeout(function () {
