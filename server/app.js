@@ -14,8 +14,12 @@ const errorHandler = require("./middlewares/error-handler");
 
 const app = express();
 
-const Server = require("socket.io").Server;
-const http = require("http");
+// const Server = require("socket.io").Server;
+// const http = require("http");
+
+
+const {createServer} = require("http");
+const  {Server} = require('socket.io');
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
@@ -30,22 +34,34 @@ app.use(express.json());
 
 
 
-const httpServer = http.createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    credentials: true,
-  },
-  pingTimeout: 60000,
-});
 
 
 const corsOptions = {
   origin: "*",
 };
-app.use(morgan("dev"));
+
+// app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors(corsOptions));
+
+
+// const httpServer = http.createServer(app);
+
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: "http://localhost:8100",
+//     // credentials: true,
+//   },
+//   pingTimeout: 60000,
+// });
+
+const httpServer = createServer();
+const io = new Server(httpServer,{
+  cors: {
+    origin: "http://localhost:8100"
+  }
+})
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to the official Bank One API");
@@ -78,8 +94,10 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-io.on("connection", socket => {
-  socketFunctions(io, socket);
+io.on('connection', socket => {
+  console.log('hiiya');
+  console.log(socket);
+  // socketFunctions(io, socket);
 });
 
 // const createCryptoAsset = require('./trading-routes/crypto.route')
