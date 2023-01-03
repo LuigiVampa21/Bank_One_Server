@@ -17,24 +17,17 @@ const cmdtsForexUpdate = () => {
      }, 43200000 )
 };
 
-// const stockUpdate = () => {
-//     setInterval
-// }
-
-
 const autoUpdateAssets = () => {
-
     const currentDateSeconds = new Date().getSeconds();
-    if (currentDateSeconds == 0) {
-        cryptoStocksUpdate()
-        cmdtsForexUpdate()
+        if (currentDateSeconds == 0) {
+            cryptoStocksUpdate()
+            cmdtsForexUpdate()
+            }
+        else {
+            setTimeout(function () {
+                autoUpdateAssets();
+            }, (60 - currentDateSeconds) * 1000);
         }
-    else {
-        setTimeout(function () {
-            autoUpdateAssets();
-        }, (60 - currentDateSeconds) * 1000);
-    }
-    
 }
 
 

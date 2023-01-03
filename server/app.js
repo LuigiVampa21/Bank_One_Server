@@ -7,11 +7,15 @@ const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
 const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
+const socketFunctions = require('./webSocket/socket.function');
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
 
 const app = express();
+
+const Server = require("socket.io").Server;
+const http = require("http");
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
@@ -23,6 +27,18 @@ const assetRoute = require('./routes/asset.route')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
+  pingTimeout: 60000,
+});
+
 
 const corsOptions = {
   origin: "*",
@@ -45,9 +61,9 @@ app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 
 // app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
 
+
 // THOSE Routes are not-client-guided they will be called programmtically through a pre-defined interval except for dev TESTING
 // OR CREATING ASSETS => routes starts with admin
-
 const stocksRoute = require('./trading-routes/stocks.route')
 const fxcmdtsRoute = require('./trading-routes/commodittiesForex.route')
 app.use('/api/v1/bankone/admin/stocks', stocksRoute)
@@ -62,13 +78,18 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
+io.on("connection", socket => {
+  socketFunctions(io, socket);
+});
+
 // const createCryptoAsset = require('./trading-routes/crypto.route')
 // const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
 const PORT = process.env.PORT | 4040;
-app.listen(PORT, async () => {
+httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
+  // UNCOMMENT WHEN READY FOR PRODUCTION
   // autoUpdateAssets()
 
   // TEST
@@ -82,9 +103,5 @@ app.listen(PORT, async () => {
 
   // CREATE CRYPTO ASSET
   // await createCryptoAsset()
-
-  // setInterval(() => {
-  //   UPDATE PRICE OF ASSETS
-  // }, 600000)
   
 });
