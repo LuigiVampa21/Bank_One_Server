@@ -1,9 +1,11 @@
 const cryptoController = require('../trading-controllers/crypto.controller')
 const commodittiesForexController = require('../trading-controllers/commodittiesForex.controller') 
+const stockController = require('../trading-controllers/stocks.controller')
 
-const cryptoUpdate = () => {
+const cryptoStocksUpdate = () => {
     setInterval(() => {
    cryptoController.updateCryptoPrice()
+   stockController.updateStockPrice()
 }, 60000 )
 };
 
@@ -13,14 +15,18 @@ const cmdtsForexUpdate = () => {
         // 43,200,000 = 12H
     // }, 60000 )
      }, 43200000 )
-}
+};
+
+// const stockUpdate = () => {
+//     setInterval
+// }
 
 
 const autoUpdateAssets = () => {
 
     const currentDateSeconds = new Date().getSeconds();
     if (currentDateSeconds == 0) {
-        cryptoUpdate()
+        cryptoStocksUpdate()
         cmdtsForexUpdate()
         }
     else {

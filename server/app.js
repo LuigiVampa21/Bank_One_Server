@@ -74,6 +74,7 @@ app.listen(PORT, async () => {
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
   // await require('./trading-controllers/commodittiesForex.controller').updateCmdtsForexPrice()
+  // await require('./trading-controllers/stocks.controller').updateStockPrice()
 
   await connectDB();
 
