@@ -14,12 +14,12 @@ const errorHandler = require("./middlewares/error-handler");
 
 const app = express();
 
-// const Server = require("socket.io").Server;
-// const http = require("http");
+const Server = require("socket.io").Server;
+const http = require("http");
 
 
-const {createServer} = require("http");
-const  {Server} = require('socket.io');
+// const {createServer} = require("http");
+// const  {Server} = require('socket.io');
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
@@ -45,22 +45,22 @@ app.use(helmet());
 app.use(cors(corsOptions));
 
 
-// const httpServer = http.createServer(app);
+const httpServer = http.createServer(app);
 
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: "http://localhost:8100",
-//     // credentials: true,
-//   },
-//   pingTimeout: 60000,
-// });
-
-const httpServer = createServer();
-const io = new Server(httpServer,{
+const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:8100"
-  }
-})
+    origin: "http://localhost:8100",
+    // credentials: true,
+  },
+  pingTimeout: 60000,
+});
+
+// const httpServer = createServer();
+// const io = new Server(httpServer,{
+//   cors: {
+//     origin: "http://localhost:8100"
+//   }
+// })
 
 
 app.get("/", (req, res) => {
@@ -95,8 +95,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 io.on('connection', socket => {
-  console.log('hiiya');
-  console.log(socket);
+  console.log('------------------------------------------------------------------------------------------');
+  console.log(socket.id);
   // socketFunctions(io, socket);
 });
 
