@@ -16,8 +16,13 @@ exports.createStockAsset = async(req,res) => {
 
 exports.updateStockPrice = async() => {
 
-    let stocksDataFromAPI = [];
+    const currentHour = new Date().getHours();
 
+    if(!(currentHour >= 15.5 && currentHour < 22.5)) return;
+
+// if (currentHour >= 15.5 && currentHour < 22.5) {
+    let stocksDataFromAPI = [];
+    
     const response = await axios.get(process.env.STOCKS_UPDATE_URL);
     const {result} = response.data.quoteResponse
     
@@ -34,6 +39,7 @@ exports.updateStockPrice = async() => {
             last_update: new Date()
         })
         await stock.save()
-        console.log(stock.toJSON());
+        // console.log(stock.toJSON());
     }
+// }
 }

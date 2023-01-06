@@ -53,6 +53,8 @@ const io = new Server(httpServer, {
 });
 
 
+
+
 app.get("/", (req, res) => {
   res.send("Welcome to the official Bank One API");
 });
@@ -76,7 +78,6 @@ app.use('/api/v1/bankone/admin/stocks', stocksRoute)
 app.use('/api/v1/bankone/admin/fxcmdts', fxcmdtsRoute)
 
 
-
 // MASTER BANK ACCOUNT PRIVATE
 const bkmRoute = require("./routes/_bankAccountMaster.route");
 app.use("/api/v1/bankone/bank-account-master", bkmRoute);
@@ -84,11 +85,13 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-io.on('connection', socket => {
-  console.log('------------------------------------------------------------------------------------------');
-  console.log(socket.id);
-  // socketFunctions(io, socket);
-});
+// io.on('connection', socket => {
+//   console.log('------------------------------------------------------------------------------------------');
+//   console.log(socket.id);
+//   // socketFunctions(io, socket);
+// });
+
+
 
 // console.log(io);
 
@@ -101,7 +104,14 @@ httpServer.listen(PORT, async () => {
 
   // UNCOMMENT WHEN READY FOR PRODUCTION
   // this file needs to be required after initiating the io instance otherwise we won't be able to acces it to emit event cause it will be empty 
-  require('./utils/setAssetUpdatingTimer')();
+
+  io.on('connection', socket => {
+    console.log('------------------------------------------------------------------------------------------');
+    console.log(socket.id);
+    // socketFunctions(io, socket);
+    require('./utils/setAssetUpdatingTimer')(io);
+  });
+
 
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
