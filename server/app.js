@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
-const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
+// const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
 const socketFunctions = require('./webSocket/socket.function');
 
 const notFound = require("./middlewares/not-found");
@@ -33,9 +33,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-
-
-
 const corsOptions = {
   origin: "*",
 };
@@ -54,13 +51,6 @@ const io = new Server(httpServer, {
   },
   pingTimeout: 60000,
 });
-
-// const httpServer = createServer();
-// const io = new Server(httpServer,{
-//   cors: {
-//     origin: "http://localhost:8100"
-//   }
-// })
 
 
 app.get("/", (req, res) => {
@@ -100,6 +90,8 @@ io.on('connection', socket => {
   // socketFunctions(io, socket);
 });
 
+// console.log(io);
+
 // const createCryptoAsset = require('./trading-routes/crypto.route')
 // const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
@@ -108,7 +100,8 @@ httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
   // UNCOMMENT WHEN READY FOR PRODUCTION
-  autoUpdateAssets()
+  // this file needs to be required after initiating the io instance otherwise we won't be able to acces it to emit event cause it will be empty 
+  require('./utils/setAssetUpdatingTimer')();
 
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()

@@ -1,8 +1,8 @@
 const cryptoController = require('../trading-controllers/crypto.controller')
 const commodittiesForexController = require('../trading-controllers/commodittiesForex.controller') 
 const stockController = require('../trading-controllers/stocks.controller')
+const io = require('../app')
 
-const {io} = require('../app')
 
 const cryptoStocksUpdate = () => {
     setInterval( async () => {
