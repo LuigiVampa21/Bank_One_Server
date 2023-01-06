@@ -15,10 +15,7 @@ exports.createStockAsset = async(req,res) => {
 }
 
 exports.updateStockPrice = async() => {
-
-    const currentHour = new Date().getHours();
-
-    if(!(currentHour >= 15.5 && currentHour < 22.5)) return;
+ 
 
 // if (currentHour >= 15.5 && currentHour < 22.5) {
     let stocksDataFromAPI = [];

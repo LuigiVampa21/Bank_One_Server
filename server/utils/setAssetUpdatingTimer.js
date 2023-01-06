@@ -9,9 +9,12 @@ const io = require('../app')
 
 
 const cryptoStocksUpdate = (io) => {
+    const currentHour = new Date().getHours();
     setInterval( async () => {
    await cryptoController.updateCryptoPrice()
-   await stockController.updateStockPrice()
+   if(currentHour >= 15.5 && currentHour < 22.5){
+       await stockController.updateStockPrice()
+    }
    io.emit('prices updated')
 // }, 10000 )
 }, 60000 )

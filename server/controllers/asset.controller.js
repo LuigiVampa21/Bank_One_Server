@@ -1,12 +1,13 @@
 const {sequelize} = require('../config/connectDB')
 const Asset = require('../models/asset.model');
 const {StatusCodes} = require('http-status-codes');
+const sortArray = require('../utils/sortAssets');
 
 exports.getAllAssets = async(req,res) =>{
-    const crypto = await Asset.findAll({where: {type: 'crypto'}});
-    const stocks = await Asset.findAll({where: {type: 'stock'}});
-    const commoditties = await Asset.findAll({where: {type: 'commodity'}});
-    const forex = await Asset.findAll({where: {type: 'forex'}});
+    const crypto = sortArray(await Asset.findAll({where: {type: 'crypto'}}));
+    const stocks = sortArray(await Asset.findAll({where: {type: 'stock'}}));
+    const commoditties = sortArray(await Asset.findAll({where: {type: 'commodity'}}));
+    const forex = sortArray(await Asset.findAll({where: {type: 'forex'}}));
     const assets = {
         crypto,
         stocks,
