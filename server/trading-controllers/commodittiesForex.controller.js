@@ -29,7 +29,7 @@ exports.updateCmdtsForexPrice = async() => {
    const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
 
 //    console.log(today, yesterday);
-const api_url = `${process.env.COMMODITTIES_API_URL}?access_key=${process.env.COMMODITTIES_API_KEY}&start_date=${yesterday}&end_date=${today}&base=USD&symbols=${process.env.COMMODITTIES_API_SYMBOLS}`
+const api_url = `${process.env.COMMODITTIES_API_URL}/fluctuation?access_key=${process.env.COMMODITTIES_API_KEY}&start_date=${yesterday}&end_date=${today}&base=USD&symbols=${process.env.COMMODITTIES_API_SYMBOLS}`
 
     // let ratesArrayofObject = [];
     const cmdtsForexAssetsFromDB = await Asset.findAll({where: {

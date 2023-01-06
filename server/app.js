@@ -108,7 +108,7 @@ httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
   // UNCOMMENT WHEN READY FOR PRODUCTION
-  // autoUpdateAssets()
+  autoUpdateAssets()
 
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
@@ -123,3 +123,5 @@ httpServer.listen(PORT, async () => {
   // await createCryptoAsset()
   
 });
+
+module.exports = io;

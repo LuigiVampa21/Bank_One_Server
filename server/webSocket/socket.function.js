@@ -8,16 +8,6 @@ const socketFunctions = (io, socket) => {
   socket.on("login", data => {
       console.log('-------------------------------------------------------------------------------');
       console.log(data);
-
-    // axios
-    //   .post("http:/localhost:3001/api/v1/chatApp/auth/login", {
-    //     email,
-    //     password,
-    //   })
-    //   .then(res => {
-    //     loadEvents(socket);
-    //   })
-    //   .catch(err => console.log(err));
   });
 };
 
