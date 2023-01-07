@@ -85,13 +85,6 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-// io.on('connection', socket => {
-//   console.log('------------------------------------------------------------------------------------------');
-//   console.log(socket.id);
-//   // socketFunctions(io, socket);
-// });
-
-
 
 // console.log(io);
 
@@ -99,6 +92,7 @@ app.use(errorHandler);
 // const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
 const PORT = process.env.PORT | 4040;
+const checkDate = require('./utils/moneyDay/checkDate')
 httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
@@ -106,7 +100,6 @@ httpServer.listen(PORT, async () => {
   // this file needs to be required after initiating the io instance otherwise we won't be able to acces it to emit event cause it will be empty 
 
   io.on('connection', socket => {
-    console.log('------------------------------------------------------------------------------------------');
     console.log(socket.id);
     // socketFunctions(io, socket);
   });
@@ -119,9 +112,10 @@ httpServer.listen(PORT, async () => {
   // await require('./trading-controllers/stocks.controller').updateStockPrice()
   
   await connectDB();
-  
-  require('./utils/moneyDay/moneyDay')
-  
+  checkDate()
+
+  // require('./utils/moneyDay/moneyDay')
+
   // fxcmdtController.deleteAsset()
 
   // CREATE CRYPTO ASSET

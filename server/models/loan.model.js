@@ -61,7 +61,7 @@ const Loan = sequelize.define(
       allowNull: false,
     },
     starting_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     total: {

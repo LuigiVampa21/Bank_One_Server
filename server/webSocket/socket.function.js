@@ -1,12 +1,10 @@
 // const axios = require("axios");
 
 const socketFunctions = (io, socket) => {
-  console.log('-------------------------------------------------------------------------------');
   console.log("new connection " + socket.id);
   
   
   socket.on("login", data => {
-      console.log('-------------------------------------------------------------------------------');
       console.log(data);
   });
 };

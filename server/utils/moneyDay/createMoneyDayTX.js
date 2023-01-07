@@ -13,8 +13,11 @@ const createMoneyDayTx = async (account, amount) => {
 if(!moneyDayTX) {
     throw new CustomError.BadRequestError(`Sorry could not create that transaction on that account: ${account.id}`)
 };
+await moneyDayTX.update({
+    status: "settled"
+})
+await moneyDayTX.save()
 await transactionController.finalizeTx(moneyDayTX, true)
-
 }
 
 
