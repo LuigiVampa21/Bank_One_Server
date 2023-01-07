@@ -110,17 +110,18 @@ httpServer.listen(PORT, async () => {
     console.log(socket.id);
     // socketFunctions(io, socket);
   });
-  require('./utils/setAssetUpdatingTimer')(io);
-
+  // require('./utils/setAssetUpdatingTimer')(io);
   
-
+  
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
   // await require('./trading-controllers/commodittiesForex.controller').updateCmdtsForexPrice()
   // await require('./trading-controllers/stocks.controller').updateStockPrice()
-
+  
   await connectDB();
-
+  
+  require('./utils/moneyDay/moneyDay')
+  
   // fxcmdtController.deleteAsset()
 
   // CREATE CRYPTO ASSET

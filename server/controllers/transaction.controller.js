@@ -92,7 +92,7 @@ if(type === 'external' && isInternal){
   }
   
   await transaction.setBankAccount(bankAccount);
-  
+
   res.status(StatusCodes.OK).json({
     bankAccount,
     transaction,
@@ -130,9 +130,7 @@ exports.finalizeTx = async (transaction, loan = false) => {
   await accountReceiving.increment("amount", {
     by: amount,
   });
-  if(loan){
-    return
-  }
+  if(loan) return;
     await addToReceiverKnownAccounts(accountSending, accountReceiving)
 };
 
