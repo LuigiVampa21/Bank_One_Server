@@ -12,6 +12,7 @@ router.route("/").post(async (req, res) => {
     type: "Bank One Ltd.",
     is_active: true,
     amount: 1000000000,
+    has_received_money_day: false,
   });
   res.status(200).json({
     masterBA,

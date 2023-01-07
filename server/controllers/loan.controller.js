@@ -1,4 +1,3 @@
-const {Op} = require('sequelize');
 const { StatusCodes } = require("http-status-codes");
 const crypto = require("crypto");
 
@@ -55,7 +54,7 @@ exports.createNewLoan = async (req, res) => {
     verificationToken: hashedToken,
   });
 
-  res.status(200).json({
+  res.status(StatusCodes.OK).json({
     data: loan,
   });
 };

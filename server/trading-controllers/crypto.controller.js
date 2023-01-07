@@ -33,33 +33,22 @@ exports.updateCryptoPrice = async() => {
             const crypto = await Asset.findOne({where:{id: dataObj.id}})
             // console.log(crypto);
             // console.log(crypto.price);
-            console.log('-------------------------------------------------------------');
-            console.log(crypto.id, crypto.price, crypto.one_day_change);
-            console.log(crypto.one_day_change);
+            // console.log('-------------------------------------------------------------');
+            // console.log(crypto.id, crypto.price, crypto.one_day_change);
+            // console.log(crypto.one_day_change);
             const last_price_db = crypto.price;
             const last_price_api = dataObj.price;
             const one_day_change = last_price_db > last_price_api ? -dataObj.one_day_change : dataObj.one_day_change;
-            // console.log(last_price_db,last_price_api);
-            
-            // if(last_price_db > last_price_api){
                 await crypto.update({
                     one_day_change,
                     price: dataObj.price,
                     last_update: new Date()
                 })
-            // }
-            // else{
-            //     await crypto.update({
-            //         price: dataObj.price,
-            //         one_day_change: dataObj.one_day_change,
-            //         last_update: new Date()
-            //     })
-            // }
             await crypto.save()
-            console.log(crypto.toJSON());
-            // console.log(crypto.one_day_change);
-            console.log(crypto.id, crypto.price, crypto.one_day_change);
-            console.log('-------------------------------------------------------------');
+            // console.log(crypto.toJSON());
+            // // console.log(crypto.one_day_change);
+            // console.log(crypto.id, crypto.price, crypto.one_day_change);
+            // console.log('-------------------------------------------------------------');
         }
     }
 }

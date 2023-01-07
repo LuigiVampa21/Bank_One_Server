@@ -87,11 +87,12 @@ if(type === 'external' && isInternal){
     verificationToken: transaction.verification_token,
     beneficiary,
   });
-  await transaction.setBankAccount(bankAccount);
   if(type === 'external'){
     await addToSenderKnownAccounts(user, beneficiary)
   }
-
+  
+  await transaction.setBankAccount(bankAccount);
+  
   res.status(StatusCodes.OK).json({
     bankAccount,
     transaction,

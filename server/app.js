@@ -112,6 +112,7 @@ httpServer.listen(PORT, async () => {
   });
   require('./utils/setAssetUpdatingTimer')(io);
 
+  
 
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()

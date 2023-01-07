@@ -37,6 +37,10 @@ const BankAccount = sequelize.define(
       type: DataTypes.DECIMAL(12, 2),
       defaultValue: 0,
     },
+    has_received_money_day: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: null,
+    }
   },
   {
     hooks: {

@@ -342,6 +342,8 @@ exports.approveCard = async(req,res) => {
   })
 
 }
+
+
 exports.deleteAccount = async(req,res) => {
   const {token, email } = req.query;
   if(!token || !email)
