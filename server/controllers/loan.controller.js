@@ -38,6 +38,7 @@ exports.createNewLoan = async (req, res) => {
     rate,
     total,
     duration: durationMonth,
+    month_left: durationMonth,
     monthly_payment: monthlyTotal,
     verification_token: verificationToken,
     starting_date: startingDate,

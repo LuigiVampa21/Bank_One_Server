@@ -1,7 +1,8 @@
 const moment = require("moment");
 const moneyDayFn = require('./moneyDay');
 
-const timerToMoneyDay = (timerDuration) => {
+// const timerToMoneyDay = (timerDuration) => {
+const timerToMoneyDay = () => {
 
     let nextFifthUnix;
     const timeOutLimit = 2147483647;
@@ -29,8 +30,8 @@ const timerToMoneyDay = (timerDuration) => {
 
 
 const startTimer = duration => {
-    setTimeout(() => {
-        moneyDayFn()
+    setTimeout(async () => {
+        await moneyDayFn()
     }, duration)
 };
 

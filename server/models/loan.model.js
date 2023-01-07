@@ -33,6 +33,13 @@ const Loan = sequelize.define(
         min: 12,
       },
     },
+    month_left: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        max: 300,
+      },
+    },
     monthly_payment: {
       type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
