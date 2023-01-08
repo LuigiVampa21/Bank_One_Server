@@ -1,6 +1,7 @@
 const BankAccount = require('../../models/bankAccount.model');
 const moneyDayFn = require('./moneyDay');
 const timerToMoneyDay = require('./timerToMoneyDate')
+const resetMBATimer = require('./resetMBATimer')
 const {Op} = require('sequelize')
 
 const checkDate = async () => {
@@ -16,7 +17,7 @@ const checkDate = async () => {
     if(currentDate === 5 && !masterBA.has_received_money_day){
         await moneyDayFn()
     }else if(currentDate === 5 && masterBA.has_received_money_day){
-        timerToMoneyDay()
+        resetMBATimer(masterBA)
     }else{
         if(masterBA.has_received_money_day){
             await masterBA.update({

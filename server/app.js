@@ -2,12 +2,12 @@ require("dotenv").config();
 require("express-async-errors");
 
 const express = require("express");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
 // const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
-const socketFunctions = require('./webSocket/socket.function');
+// const socketFunctions = require('./webSocket/socket.function');
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
@@ -31,6 +31,8 @@ const assetRoute = require('./routes/asset.route')
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// app.use(express.static('public'))
 
 
 const corsOptions = {
@@ -58,6 +60,7 @@ const io = new Server(httpServer, {
 app.get("/", (req, res) => {
   res.send("Welcome to the official Bank One API");
 });
+
 
 app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
@@ -112,7 +115,7 @@ httpServer.listen(PORT, async () => {
   // await require('./trading-controllers/stocks.controller').updateStockPrice()
   
   await connectDB();
-  checkDate()
+  await checkDate()
 
   // require('./utils/moneyDay/moneyDay')
 

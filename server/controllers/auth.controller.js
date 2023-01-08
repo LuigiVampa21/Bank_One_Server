@@ -157,11 +157,12 @@ exports.verifyEmail = async (req, res) => {
 
   const card = await cardFactory(userAccounts,user, 'digital')
 
-  res.status(StatusCodes.OK).json({
-    user,
-    card,
-    msg: "Your email has been verified",
-  });
+  // res.status(StatusCodes.OK).json({
+  //   user,
+  //   card,
+  //   msg: "Your email has been verified",
+  // });
+  res.sendFile('verifyEmail.html', {root: './public/pages'})
 };
 
 

@@ -6,6 +6,7 @@ const activateLoans = require('./activateLoans');
 const sendLoanPaid = require('../../email/sendLoanPaid');
 const getUserData = require('../getUserMailAndNameFromBankAccount');
 const resetMBATimer = require('./resetMBATimer')
+const {Op} = require('sequelize')
 
 
 const moneyDayFn = async() => {
@@ -25,7 +26,6 @@ const moneyDayFn = async() => {
     }
     const loans = await Loan.findAll({where: {is_active: true}});
     for(const loan of loans){
-        // console.log(loan.toJSON());
         const {monthly_payment: amount} = loan
         const account = await loan.getBankAccount();
         await createMoneyDayTx(account,amount)
@@ -55,10 +55,9 @@ const moneyDayFn = async() => {
 
     //   NOW WE NEED TO GET NUMBER OF MILLSECONDS REMAINING TIL THE 6 SO WE SET A TIMER THAT WILL CHANGE BACK THE has_received_money_day PROPERTY TO FALSE;
     
-    resetMBATimer()
+    resetMBATimer(masterBA)
 
 } 
 
-// moneyDayFn()
 
 module.exports = moneyDayFn;
