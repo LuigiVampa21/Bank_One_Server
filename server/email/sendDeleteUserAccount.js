@@ -4,7 +4,7 @@ const sendDeleteUserAccount = async (user, verificationToken) => {
   const verifyEmail = `${process.env.ORIGIN_API}/delete-account/?token=${verificationToken}&email=${user.email}`;
 
   const message = `<p>By clicking this link you authorize us to close your account: ${user.id} and disable all remaining bank accounts and cards:
-  <a href="${verifyEmail}">Delete your account</a></p>
+  <a href="${verifyEmail}" target="_blank">Delete your account</a></p>
   <p>In accordance with the legislation we still have to keep your informations available for 5years after the date of removal.</p>
   <p>Please prior to delete your account, be sure there are no funds left on any accounts and no transaction processing at this time </p>
   <p>If you did not requested any account deletion, please contact the support team immediately</p>

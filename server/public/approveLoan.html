@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        height: 90vh;
+        width: 90vw;
+        background: #0b0f12;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Roboto';
+    }
+    .container{
+        transform: translateX(5vw);
+        /* background: #b3c3ff; */
+        background: #1af530;
+        border-radius: 10px;
+        height: 30vh;
+        width: 60vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .container > *{
+        color: #252b32;
+        padding: 10px;
+        font-size: 20px;
+    }
+    a{
+        color: #252b32;
+    }
+    .logo{
+        width: 25px;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
+    .first-line{
+        text-align: center;
+    }
+    .footer{
+        font-size: 12px;
+        transform: translate(5vw, 10vh);
+        width: 25vw;
+        height: 10vh;
+        color: #8f93a3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+</style>
+<body>
+    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/9098/9098927.png" alt="bank_one_logo">
+    <div class="container">
+        <div class="first-line">
+            <p>
+                Your loan has been approved !
+            </p>
+        </div>
+        <p>
+            <a href="http://localhost:8100" target="_blank">
+                   Check it out in your account
+            </a>
+        </p>
+    </div>
+    <div class="footer">
+        © Bank One Inc. - 2023
+    </div>
+</body>
+</html>
