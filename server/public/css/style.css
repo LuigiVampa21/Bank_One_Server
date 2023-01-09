@@ -10,8 +10,7 @@ body{
 }
 .container{
     transform: translateX(5vw);
-    /* background: #b3c3ff; */
-    background: #1af530;
+    background: #b3c3ff;
     border-radius: 10px;
     height: 30vh;
     width: 60vw;

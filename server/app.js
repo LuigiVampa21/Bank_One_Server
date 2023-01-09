@@ -6,6 +6,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const { connectDB } = require("./config/connectDB");
+const path = require('path')
 // const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
 // const socketFunctions = require('./webSocket/socket.function');
 
@@ -33,6 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, "public")));
 
 
 const corsOptions = {
