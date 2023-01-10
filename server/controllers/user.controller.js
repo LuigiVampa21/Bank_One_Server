@@ -4,7 +4,6 @@ const CustomError = require('../errors')
 const { StatusCodes } = require('http-status-codes');
 const crypto = require('crypto')
 const lastTXFn = require('../utils/txsResolver');
-const getBeneficiary = require('../utils/txBeneficiary');
 const sortingAccounts = require('../utils/sortingAccountConvention');
 const getKnownAccounts = require('../utils/getKnownAccounts');
 const sendDeleteUserAccount = require('../email/sendDeleteUserAccount');
@@ -17,16 +16,16 @@ exports.getOverview = async(req,res) => {
   let beneficiaryName;
   const {accounts, lastTx} = await lastTXFn(userID, 'lastTX');
   // console.log(lastTransaction);
-  if(lastTx){
-    beneficiaryName = await getBeneficiary(lastTx);
-  }
+  // console.log(lastTx);
+  // if(lastTx){
+  //   beneficiaryName = await getBeneficiary(lastTx);
+  // }
   const knownAccounts = await getKnownAccounts(req.user)
   // Can not add attribute on model after creation, will add to pass it as an argument, will try something ele later on
   // lastTransaction.beneficiary_name = beneficiaryName;
   res.status(StatusCodes.OK).json({
       accounts,
       lastTx, 
-      beneficiaryName,
       knownAccounts
   })
 }

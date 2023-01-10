@@ -180,6 +180,9 @@ exports.forgotPassword = async (req, res) => {
     Date.now() + eval(process.env.EXP_RESET_PASSWORD)
   );
 
+  console.log(process.env.EXP_RESET_PASSWORD);
+  console.log(passwordTokenExpirationDate);
+
   await sendResetPasswordEmail({
     name: user.name,
     email: user.email,
@@ -224,6 +227,7 @@ exports.resetPassword = async (req, res) => {
     data: user,
     msg: "Your password has been updated",
   });
+
 };
 
 exports.confirmTx = async (req, res) => {
@@ -253,9 +257,10 @@ exports.confirmTx = async (req, res) => {
   if (newTx) {
     txController.finalizeTx(transaction);
   }
-  res.status(StatusCodes.OK).json({
-    transaction,
-  });
+  // res.status(StatusCodes.OK).json({
+  //   transaction,
+  // });
+  res.sendFile('approveTransaction.html', {root: './public/pages'});
 };
 
 exports.approveLoan = async (req, res) => {
@@ -287,9 +292,10 @@ exports.approveLoan = async (req, res) => {
 
   await txController.finalizeTx(loanTX, true)
 
-  res.status(StatusCodes.OK).json({
-    loanTX
-  })
+  // res.status(StatusCodes.OK).json({
+  //   loanTX
+  // })
+  res.sendFile('approveLoan.html', {root: './public/pages'})
   
 };
 
@@ -312,9 +318,10 @@ exports.approveInsurance = async(req,res) => {
   })
   await digitalCard.save()
 
-  res.status(StatusCodes.OK).json({
-    cards
-  })
+  // res.status(StatusCodes.OK).json({
+  //   cards
+  // })
+  res.sendFile('approveInsurance.html', {root: './public/pages'})
 
 }
 
@@ -338,9 +345,11 @@ exports.approveCard = async(req,res) => {
   })
   await card.save()
 
-  res.status(StatusCodes.OK).json({
-    card
-  })
+  // res.status(StatusCodes.OK).json({
+  //   card
+  // })
+
+  res.sendFile('approveSecondCard.html', {root: './public/pages'})
 
 }
 
@@ -365,9 +374,11 @@ exports.deleteAccount = async(req,res) => {
 
   await user.destroy()
 
-  res.status(StatusCodes.OK).json({
-    user
-  })
+  // res.status(StatusCodes.OK).json({
+  //   user
+  // })
+
+  res.sendFile('deleteAccount.html', {root: './public/pages'})
 
 }
 

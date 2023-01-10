@@ -11,6 +11,7 @@ const checkType = require('../utils/checkTXType');
 const findAndSortTx = require('../utils/txsResolver');
 const getBeneficiary = require("../utils/txBeneficiary");
 const {addToSenderKnownAccounts, addToReceiverKnownAccounts} = require('../utils/addToKnownAccounts');
+const User = require("../models/user.model");
 
 exports.getAllTx = async (req, res) => {
   const txs = await Transaction.findAll();
@@ -21,7 +22,6 @@ exports.getAllTx = async (req, res) => {
 
 exports.createNewTx = async (req, res) => {
   let beneficiary_name;
-  console.log(req.body);
   const { accountSending: account, amount, description, intext: type, accountReceiving: beneficiary, exinex, newBeneficiaryName } = req.body;
   // if (!account || !amount || !description || !type || !beneficiary) {
   if (!account || !amount || !type || !beneficiary) {
@@ -64,6 +64,8 @@ if(type === 'external' && isInternal){
   throw new CustomError.BadRequestError('Sorry wrong transaction type')
 }
 
+const newBeneficiaryIsBankOneUser = await BankAccount.findOne({where: {iban: beneficiary}});
+
   const transaction = await Transaction.create({
     amount,
     description,
@@ -92,7 +94,7 @@ if(type === 'external' && isInternal){
     verificationToken: transaction.verification_token,
     beneficiary,
   });
-  if(type === 'external' && exinex !== 'new beneficiary'){
+  if((type === 'external' && exinex !== 'new beneficiary') || newBeneficiaryIsBankOneUser){
     await addToSenderKnownAccounts(user, beneficiary)
   }
   
