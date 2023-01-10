@@ -20,7 +20,9 @@ exports.getAllTx = async (req, res) => {
 };
 
 exports.createNewTx = async (req, res) => {
-  const { accountSending: account, amount, description, intext: type, accountReceiving: beneficiary } = req.body;
+  let beneficiary_name;
+  console.log(req.body);
+  const { accountSending: account, amount, description, intext: type, accountReceiving: beneficiary, exinex, newBeneficiaryName } = req.body;
   // if (!account || !amount || !description || !type || !beneficiary) {
   if (!account || !amount || !type || !beneficiary) {
     throw new CustomError.BadRequestError(
@@ -74,8 +76,11 @@ if(type === 'external' && isInternal){
       "Oops, something went wrong, please try again later!"
     );
   }
-
-  const beneficiary_name = await getBeneficiary(transaction);
+  if(exinex === 'new beneficiary'){
+    beneficiary_name = newBeneficiaryName;
+  }else{
+    beneficiary_name = await getBeneficiary(transaction);
+  }
   await transaction.update({beneficiary_name})
   await transaction.save()
 
@@ -87,7 +92,7 @@ if(type === 'external' && isInternal){
     verificationToken: transaction.verification_token,
     beneficiary,
   });
-  if(type === 'external'){
+  if(type === 'external' && exinex !== 'new beneficiary'){
     await addToSenderKnownAccounts(user, beneficiary)
   }
   
