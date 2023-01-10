@@ -108,7 +108,7 @@ httpServer.listen(PORT, async () => {
     console.log(socket.id);
     // socketFunctions(io, socket);
   });
-  // require('./utils/setAssetUpdatingTimer')(io);
+  require('./utils/setAssetUpdatingTimer')(io);
   
   
   // TEST
