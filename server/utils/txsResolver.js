@@ -87,6 +87,10 @@ const findAndSortTx = async (userID, type, accountQuery=null) => {
     }
       return resOverview
   }
+
+  if(accountQuery == null){
+    return allTxs.slice(0, 50);
+  }
   return allTxs;
   
   }
