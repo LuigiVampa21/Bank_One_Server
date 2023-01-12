@@ -50,8 +50,8 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:8100",
-    // credentials: true,
+    origin: "*",
+    // origin: "http://localhost:8100",
   },
   pingTimeout: 60000,
 });
