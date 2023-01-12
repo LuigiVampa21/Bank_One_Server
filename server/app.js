@@ -42,7 +42,8 @@ const corsOptions = {
 };
 
 app.use(morgan("dev"));
-app.use(helmet());
+// app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors(corsOptions));
 
 
