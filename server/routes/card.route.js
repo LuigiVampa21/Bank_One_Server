@@ -21,25 +21,25 @@ router.route("/:id").patch(
   
   // DEV PURPOSES
   
-  const addInsurancesOnCards = require('../utils/addInsurancesOnCards');
-  const Card = require("../models/card.model");
+  // const addInsurancesOnCards = require('../utils/addInsurancesOnCards');
+  // const Card = require("../models/card.model");
   
-  router.route('/insurance').post(async (req,res) => {
-    const cards = await addInsurancesOnCards('a58f1175-bf38-483a-a42f-35ccf3b60cc4')
-    res.status(200).json({
-      cards
-    })
-  })
+  // router.route('/insurance').post(async (req,res) => {
+  //   const cards = await addInsurancesOnCards('a58f1175-bf38-483a-a42f-35ccf3b60cc4')
+  //   res.status(200).json({
+  //     cards
+  //   })
+  // })
   
-  router.route("/:id").delete(async(req,res) => {
-    const card = await Card.findByPk(req.params.id)
-    await card.destroy({force: true});
-    res.status(204).json({
-      msg: 'deleted'
-    })
-  }
+  // router.route("/:id").delete(async(req,res) => {
+  //   const card = await Card.findByPk(req.params.id)
+  //   await card.destroy({force: true});
+  //   res.status(204).json({
+  //     msg: 'deleted'
+  //   })
+  // }
 
-   );
+  //  );
 
 
 module.exports = router;

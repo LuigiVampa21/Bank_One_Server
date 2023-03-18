@@ -5,10 +5,10 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+const rateLimit = require('express-rate-limit');
+const xss = require('xss-clean');
 const { connectDB } = require("./config/connectDB");
 const path = require('path')
-// const autoUpdateAssets = require('./utils/setAssetUpdatingTimer');
-// const socketFunctions = require('./webSocket/socket.function');
 
 const notFound = require("./middlewares/not-found");
 const errorHandler = require("./middlewares/error-handler");
@@ -17,10 +17,6 @@ const app = express();
 
 const Server = require("socket.io").Server;
 const http = require("http");
-
-
-// const {createServer} = require("http");
-// const  {Server} = require('socket.io');
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
@@ -33,37 +29,44 @@ const assetRoute = require('./routes/asset.route')
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// app.use(express.static('public'))
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(morgan("dev"));
 
 const corsOptions = {
   origin: "*",
+  // origin: "bank-one-android.vercel.app",
 };
 
-app.use(morgan("dev"));
-// app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+// Branch Main activate this line 
+app.use(helmet());
 app.use(cors(corsOptions));
 
+const limiter = rateLimit({
+  max: 10,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!'
+});
+app.use('/apibankone/auth/login', limiter);
+
+app.use(xss());
+
+
+// Branch Render activate this line
+// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
-    // origin: "http://localhost:8100",
   },
   pingTimeout: 60000,
 });
 
-
-
-
 app.get("/", (req, res) => {
   res.send("Welcome to the official Bank One API");
 });
-
 
 app.use("/api/v1/bankone/auth", authRoute);
 app.use("/api/v1/bankone/users", userRoute);
@@ -76,8 +79,8 @@ app.use("/api/v1/bankone/bank-accounts", bankAccountRoute);
 // app.use("/api/v1/cards/bacardRoute-accounts", bankAccountRoute);
 
 
-// THOSE Routes are not-client-guided they will be called programmtically through a pre-defined interval except for dev TESTING
-// OR CREATING ASSETS => routes starts with admin
+// THOSE Routes are not-client-guided they will be called programmtically
+//  through a pre-defined interval except for dev TESTING
 const stocksRoute = require('./trading-routes/stocks.route')
 const fxcmdtsRoute = require('./trading-routes/commodittiesForex.route')
 app.use('/api/v1/bankone/admin/stocks', stocksRoute)
@@ -91,34 +94,32 @@ app.use("/api/v1/bankone/bank-account-master", bkmRoute);
 app.use(notFound);
 app.use(errorHandler);
 
-
-// console.log(io);
-
 // const createCryptoAsset = require('./trading-routes/crypto.route')
 // const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
 const PORT = process.env.PORT | 4040;
-const checkDate = require('./utils/moneyDay/checkDate')
+// const checkDate = require('./utils/moneyDay/checkDate')
 httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
-
-  // UNCOMMENT WHEN READY FOR PRODUCTION
-  // this file needs to be required after initiating the io instance otherwise we won't be able to acces it to emit event cause it will be empty 
 
   io.on('connection', socket => {
     console.log(socket.id);
     // socketFunctions(io, socket);
   });
-  require('./utils/setAssetUpdatingTimer')(io);
+  // require('./utils/setAssetUpdatingTimer')(io);
   
+  await connectDB();
+  // await checkDate()
   
+});
+
+module.exports = io;
+
   // TEST
   // await require('./trading-controllers/crypto.controller').updateCryptoPrice()
   // await require('./trading-controllers/commodittiesForex.controller').updateCmdtsForexPrice()
   // await require('./trading-controllers/stocks.controller').updateStockPrice()
   
-  await connectDB();
-  await checkDate()
 
   // require('./utils/moneyDay/moneyDay')
 
@@ -127,6 +128,4 @@ httpServer.listen(PORT, async () => {
   // CREATE CRYPTO ASSET
   // await createCryptoAsset()
   
-});
 
-module.exports = io;

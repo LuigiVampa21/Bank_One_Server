@@ -1,6 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const { sequelize } = require('../config/connectDB');
+const { QueryTypes } = require('sequelize');
 
 const User = require("../models/user.model");
 const Card = require('../models/card.model')
@@ -16,69 +18,71 @@ const addInsurancesOnCards = require('../utils/addInsurancesOnCards')
 
 const sendVerificationEmail = require("../email/sendVerificationEmail");
 const sendResetPasswordEmail = require("../email/sendResetPassword");
+const { log } = require("console");
 
-exports.register = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    phone,
-    birthDate,
-    confirmPassword,
-  } = req.body;
+// exports.register = async (req, res) => {
+//   const {
+//     firstName,
+//     lastName,
+//     email,
+//     password,
+//     phone,
+//     birthDate,
+//     currency,
+//     confirmPassword,
+//   } = req.body;
 
-  const alreadyExistingUser = await User.findOne({ where: { email } });
-  if (alreadyExistingUser) {
-    throw new CustomError.BadRequestError("User with email already exists!");
-  }
-  const verificationToken = crypto.randomBytes(40).toString("hex");
+//   const alreadyExistingUser = await User.findOne({ where: { email } });
+//   if (alreadyExistingUser) {
+//     throw new CustomError.BadRequestError("User with email already exists!");
+//   }
+//   const verificationToken = crypto.randomBytes(40).toString("hex");
 
-  const user = await User.create({
-    first_name: firstName,
-    last_name: lastName,
-    email: email,
-    phone_number: phone,
-    birth_date: birthDate,
-    password: password,
-    confirmed_password: confirmPassword,
-    verification_token: verificationToken,
-    // image: "/images/" + req.file.filename,
-  });
+//   const user = await User.create({
+//     first_name: firstName,
+//     last_name: lastName,
+//     email: email,
+//     phone_number: phone,
+//     birth_date: birthDate,
+//     password: password,
+//     currency: currency,
+//     confirmed_password: confirmPassword,
+//     verification_token: verificationToken,
+//   });
 
-  if (!user) {
-    throw new CustomError.BadRequestError(
-      "Sorry could not create new User, Please try again later"
-    );
-  }
+//   if (!user) {
+//     throw new CustomError.BadRequestError(
+//       "Sorry could not create new User, Please try again later"
+//     );
+//   }
 
-  const checking = user.createBankAccount({
-    type: "checking",
-    iban: generateIBAN(),
-  });
+//   const checking = user.createBankAccount({
+//     type: "checking",
+//     iban: generateIBAN(),
+//   });
 
-  const savings = user.createBankAccount({
-    type: "savings",
-    iban: generateIBAN(),
-  });
+//   const savings = user.createBankAccount({
+//     type: "savings",
+//     iban: generateIBAN(),
+//   });
 
-  const investments = user.createBankAccount({
-    type: "investments",
-    iban: generateIBAN(),
-  });
+//   const investments = user.createBankAccount({
+//     type: "investments",
+//     iban: generateIBAN(),
+//   });
 
-  await Promise.all([checking, savings, investments]);
+//   await Promise.all([checking, savings, investments]);
 
-  await sendVerificationEmail(
-    user.first_name,
-    user.email,
-    user.verification_token
-  );
+//   await sendVerificationEmail(
+//     user.first_name,
+//     user.email,
+//     user.verification_token
+//   );
 
-  res.status(StatusCodes.CREATED).json({
-    user,
-  });
-};
+//   res.status(StatusCodes.CREATED).json({
+//     user,
+//   });
+// };
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -382,3 +386,82 @@ exports.deleteAccount = async(req,res) => {
 
 }
 
+exports.register = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    phone,
+    birthDate,
+    currency,
+    confirmPassword,
+  } = req.body;
+
+  const isEmail = await sequelize.isEmail(email); 
+
+  if (!isEmail) {
+    throw new CustomError.BadRequestError("Invalid email address");
+  }
+
+  // const alreadyExistingUser = await User.findOne({ where: { email } });
+  // if (alreadyExistingUser) {
+  //   throw new CustomError.BadRequestError("User with email already exists!");
+  // }
+
+  const [user] = await sequelize.query(
+    'SELECT * FROM "Users" WHERE email = ?',
+    {
+      replacements: [email],
+      type: sequelize.QueryTypes.SELECT,
+    }
+  ); 
+
+  if (user) {
+    throw new CustomError.BadRequestError("User with email already exists!");
+  }
+
+
+  const verificationToken = crypto.randomBytes(40).toString("hex");
+
+    await sequelize.transaction(async function (transaction) {
+      const user = await User.create({
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        phone_number: phone,
+        birth_date: birthDate,
+        currency: currency,
+        password: password,
+        confirmed_password: confirmPassword,
+        verification_token: verificationToken,
+      }, { transaction });
+
+      const checking = await user.createBankAccount({
+        type: "checking",
+        iban: generateIBAN(),
+      }, { transaction });
+
+      const savings = await user.createBankAccount({
+        type: "savings",
+        iban: generateIBAN(),
+      }, { transaction });
+
+      const investments = await user.createBankAccount({
+        type: "investments",
+        iban: generateIBAN(),
+      }, { transaction });
+
+      await sendVerificationEmail(
+        user.first_name,
+        user.email,
+        user.verification_token
+      );
+
+      return user;
+    });
+
+    res.status(StatusCodes.CREATED).json({
+      message: "Registration successful!",
+    });
+};

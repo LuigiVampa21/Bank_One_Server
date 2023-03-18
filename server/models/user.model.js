@@ -64,6 +64,16 @@ const User = sequelize.define(
         msg: "Phone number already linked to existing account",
       },
     },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [["EURO", "DOLLAR", "POUND"]],
+          msg: "Euro, dollar and pound, are the only available currency at the moment",
+        },
+      },
+    },
     birth_date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
@@ -74,7 +84,7 @@ const User = sequelize.define(
         },
         notEmpty: {
           args: true,
-          msg: "Please provide a password",
+          msg: "Please provide a birth date",
         },
       },
     },
@@ -160,9 +170,6 @@ const User = sequelize.define(
       },
       afterDestroy: async user => {
         const accounts = await user.getBankAccounts();
-        //  accounts.forEach(async account => {
-        //     await account.destroy();
-        //   });
         accounts.forEach(async account => {
           await account.update({
             is_active: false

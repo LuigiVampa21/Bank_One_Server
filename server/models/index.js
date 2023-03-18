@@ -36,8 +36,6 @@ Loan.belongsTo(BankAccount, {
   onUpdate: "CASCADE",
 });
 
-// One bankAccount can have multiple cards but one card belongs to only one Bank Account
-// At The creation of a bank Account we initiate a Digital Card and the user will then be able to apply for a physical one
 BankAccount.hasMany(Card, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

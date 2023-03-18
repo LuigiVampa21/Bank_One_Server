@@ -5,6 +5,10 @@ const authController = require("../controllers/auth.controller");
 const authMiddleware = require('../middlewares/authMiddleware')
 // const multerMiddleware = require("../utils/multer");
 
+
+//                           ORIGIN ROUTES
+
+
 router.route("/register").post(
   // multerMiddleware.multerM,
   authController.register

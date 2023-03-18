@@ -23,7 +23,6 @@ exports.getAllTx = async (req, res) => {
 exports.createNewTx = async (req, res) => {
   let beneficiary_name;
   const { accountSending: account, amount, description, intext: type, accountReceiving: beneficiary, exinex, newBeneficiaryName } = req.body;
-  // if (!account || !amount || !description || !type || !beneficiary) {
   if (!account || !amount || !type || !beneficiary) {
     throw new CustomError.BadRequestError(
       "Cannot validate your transaction, missing informations"
@@ -36,13 +35,11 @@ exports.createNewTx = async (req, res) => {
     );
   }
 
-  // commented for testing purposes think about to uncomment for production
-
-  // if (amount > bankAccount.amount) {
-  //   throw new CustomError.BadRequestError(
-  //     "Insufficient funds. Please make a deposit to complete this transaction."
-  //   );
-  // }
+  if (amount > bankAccount.amount) {
+    throw new CustomError.BadRequestError(
+      "Insufficient funds. Please make a deposit to complete this transaction."
+    );
+  }
 
   const user = await bankAccount.getUser();
   if (!user) {
@@ -52,7 +49,6 @@ exports.createNewTx = async (req, res) => {
   }
   const txToken = crypto.randomBytes(70).toString("hex");
 
-    // Possible to check 2nd tyme is type === internal
 
   const isInternal = await checkType(user, beneficiary);
 
