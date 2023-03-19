@@ -3,7 +3,6 @@ const { StatusCodes } = require("http-status-codes");
 const crypto = require("crypto");
 
 const CustomError = require("../errors");
-// const User = require("../models/user.model");
 const BankAccount = require("../models/bankAccount.model");
 const Transaction = require("../models/transaction.model");
 const sendNewTransaction = require("../email/sendNewTransaction");
@@ -163,12 +162,12 @@ exports.createNewLoanTransaction = async (loan) => {
     amount: loan.amount,
     description: "Loan approved from Bank One Ltd.",
     beneficiary: account.iban,
-    type: "external",
+    type: "loan",
     status: "settled",
 
   });
 
-  console.log(transaction.toJSON());
+  // console.log(transaction.toJSON());
 
   return transaction;
 }

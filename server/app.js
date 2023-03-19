@@ -98,7 +98,7 @@ app.use(errorHandler);
 // const fxcmdtController = require('./trading-controllers/commodittiesForex.controller')
 
 const PORT = process.env.PORT | 4040;
-// const checkDate = require('./utils/moneyDay/checkDate')
+const checkDate = require('./utils/moneyDay/checkDate')
 httpServer.listen(PORT, async () => {
   console.log(`Server is listening on port: ${PORT}`);
 
@@ -106,10 +106,10 @@ httpServer.listen(PORT, async () => {
     console.log(socket.id);
     // socketFunctions(io, socket);
   });
-  // require('./utils/setAssetUpdatingTimer')(io);
+  require('./utils/setAssetUpdatingTimer')(io);
   
   await connectDB();
-  // await checkDate()
+  await checkDate()
   
 });
 

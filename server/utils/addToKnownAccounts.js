@@ -24,8 +24,10 @@ const addToReceiverKnownAccounts = async (accountSending, accountReceiving) => {
     const userReceiving = await accountReceiving.getUser();
     if(userReceiving.known_accounts === null){
         userReceiving.known_accounts = [userSending.id]
+        await userReceiving.save();
     }else if(!userReceiving.known_accounts.includes(userSending.id)){
         userReceiving.known_accounts = [...userReceiving.known_accounts, userSending.id]
+        await userReceiving.save();
     }
     // console.log(userReceiving.toJSON());
     return;

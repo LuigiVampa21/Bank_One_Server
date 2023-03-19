@@ -48,7 +48,7 @@ const Transaction = sequelize.define(
       type: DataTypes.STRING,
       validate: {
         isIn: {
-          args: [["internal", "external"]],
+          args: [["internal", "external", "loan"]],
           msg: "Transaction must be either internal, or external",
         },
       },

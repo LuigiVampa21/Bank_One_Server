@@ -359,7 +359,7 @@ exports.approveCard = async(req,res) => {
 
 
 exports.deleteAccount = async(req,res) => {
-  const {token, email } = req.query;
+  const { token, email } = req.query;
   if(!token || !email)
   throw new CustomError.BadRequestError('Missing info, please try this link again from your mailbox');
 
@@ -378,10 +378,6 @@ exports.deleteAccount = async(req,res) => {
 
   await user.destroy()
 
-  // res.status(StatusCodes.OK).json({
-  //   user
-  // })
-
   res.sendFile('deleteAccount.html', {root: './public/pages'})
 
 }
@@ -398,11 +394,11 @@ exports.register = async (req, res) => {
     confirmPassword,
   } = req.body;
 
-  const isEmail = await sequelize.isEmail(email); 
+  // const isEmail = await sequelize.isEmail(email); 
 
-  if (!isEmail) {
-    throw new CustomError.BadRequestError("Invalid email address");
-  }
+  // if (!isEmail) {
+  //   throw new CustomError.BadRequestError("Invalid email address");
+  // }
 
   // const alreadyExistingUser = await User.findOne({ where: { email } });
   // if (alreadyExistingUser) {
