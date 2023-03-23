@@ -275,4 +275,6 @@ const Country = sequelize.define(
   // Create row with PK of product and the id of that particular customer
   
   // DEFAULT for onDelete and onUpdate automatically on CASCADE for m to m association
+
+  // BEGIN COMMIT
   
