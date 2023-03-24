@@ -4,18 +4,17 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(
 
   // Branch Main activate this line
-  `${process.env.PSQL_POSTGRES}://${process.env.PSQL_USERNAME}:${process.env.PSQL_PASSWORD}@${process.env.PSQL_HOST}:${process.env.PSQL_PORT}/${process.env.PSQL_DATABASE_NAME}`
+  // `${process.env.PSQL_POSTGRES}://${process.env.PSQL_USERNAME}:${process.env.PSQL_PASSWORD}@${process.env.PSQL_HOST}:${process.env.PSQL_PORT}/${process.env.PSQL_DATABASE_NAME}`
 
 // Branch Render activate this line
-
-  //   'postgres://luigiv:qK3jrtrUpvylOgQyayOjrt3d9oq0Pyk0@dpg-cevu2marrk0eqcoehheg-a.frankfurt-postgres.render.com:5432/bank_one_zswa', {
-//     dialectOptions: {
-//       ssl: {
-//         require: true,
-//         rejectUnauthorized: false
-//      }
-//    }
-//  }
+    'postgres://luigivampa:LbP6nwGYQq0RE1GZxhS4rVUpWI8blSkS@dpg-cgel26g2qv2dpv9blg6g-a.frankfurt-postgres.render.com/bank_one_mqtz', {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+     }
+   }
+ }
 );
 
 const connectDB = async () => {

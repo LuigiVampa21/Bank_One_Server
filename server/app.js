@@ -39,7 +39,7 @@ const corsOptions = {
 };
 
 // Branch Main activate this line 
-app.use(helmet());
+// app.use(helmet());
 app.use(cors(corsOptions));
 
 const limiter = rateLimit({
@@ -53,7 +53,7 @@ app.use(xss());
 
 
 // Branch Render activate this line
-// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 const httpServer = http.createServer(app);
 
