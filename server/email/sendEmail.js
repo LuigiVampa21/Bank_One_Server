@@ -8,7 +8,8 @@ const sendEmail = async ({ to, subject, html }) => {
 
 
   return transporter.sendMail({
-    from: `${process.env.COMPANY_NAME} '<bankone@corporation.com>'`,
+    from: `${process.env.COMPANY_NAME} bankone@corporation.com`,
+    // from: 'bankone@corporation.com',
     to,
     subject,
     html,
