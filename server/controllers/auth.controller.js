@@ -87,53 +87,35 @@ const { log } = require("console");
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = {
-    first_name: 'nathan',
-    email,
-    verification_token: 'aaaaaaaaaaaaaaaaaaaaaaaaa'
+  if (!email || !password) {
+    throw new CustomError.BadRequestError(
+      "Please provide email and/or password"
+    );
   }
+  const user = await User.findOne({ where: { email } });
+  if (!user)
+    throw new CustomError.BadRequestError("No user found with that email");
 
-  await sendVerificationEmail(
-    user.first_name,
-    user.email,
-    user.verification_token
+  if(!user.is_active)
+    throw new CustomError.UnauthorizeError('Check your mailbox to confirm your account')
+
+  const comparePassword = await user.checkPassword(password);
+  if (!comparePassword)
+    throw new CustomError.BadRequestError("Passwords does not match");
+
+  const jwtToken = jwt.sign(
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN
+    }
   );
 
-  res.status(StatusCodes.OK).json({
+  res.status(200).json({
     user,
-    token: user.verification_token,
+    token: jwtToken,
     expiry: +process.env.JWT_EXPIRES_IN_SEC
-  })
-
-  // if (!email || !password) {
-  //   throw new CustomError.BadRequestError(
-  //     "Please provide email and/or password"
-  //   );
-  // }
-  // const user = await User.findOne({ where: { email } });
-  // if (!user)
-  //   throw new CustomError.BadRequestError("No user found with that email");
-
-  // if(!user.is_active)
-  //   throw new CustomError.UnauthorizeError('Check your mailbox to confirm your account')
-
-  // const comparePassword = await user.checkPassword(password);
-  // if (!comparePassword)
-  //   throw new CustomError.BadRequestError("Passwords does not match");
-
-  // const jwtToken = jwt.sign(
-  //   { id: user.id, email: user.email },
-  //   process.env.JWT_SECRET,
-  //   {
-  //     expiresIn: process.env.JWT_EXPIRES_IN
-  //   }
-  // );
-
-  // res.status(200).json({
-  //   user,
-  //   token: jwtToken,
-  //   expiry: +process.env.JWT_EXPIRES_IN_SEC
-  // });
+  });
 };
 
 exports.logout = async(req,res)=> {
