@@ -1,3 +1,5 @@
+@import "./media-queries.css";
+
 body{
     height: 90vh;
     width: 90vw;
@@ -47,3 +49,4 @@ a{
     align-items: center;
     text-align: center;
 }
+
