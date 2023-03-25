@@ -27,7 +27,8 @@ body{
     font-size: 20px;
 }
 a{
-    color: #252b32;
+    text-decoration: none;
+    color: #b3c3ff;
 }
 .logo{
     width: 25px;
@@ -50,3 +51,10 @@ a{
     text-align: center;
 }
 
+.btn{
+    border: none;
+    border-radius: 2px;
+    background:  #0b0f12;
+    width: 20vw;
+    height: 5vh;
+}
